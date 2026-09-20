@@ -1,0 +1,28 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.9
+sqlalchemy==2.0.35
+pydantic==2.9.2
+pydantic-settings==2.5.2
+pypdf==4.3.1
+python-docx==1.1.2
+sentence-transformers==3.1.1
+faiss-cpu==1.8.0.post1
+nltk==3.9.1
+scikit-learn==1.5.2
+networkx==3.3
+numpy==1.26.4
+google-generativeai==0.8.3
+rank-bm25==0.2.2
+python-dotenv==1.0.1
+aiofiles==24.1.0
+pytesseract==0.3.13
+pdf2image==1.17.0
+pyjwt==2.9.0
+bcrypt==4.2.0
+spacy==3.7.5
+# en_core_web_lg isn't on PyPI — install separately after requirements.txt:
+#   python -m spacy download en_core_web_lg
+en_core_web_lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.1/en_core_web_lg-3.7.1-py3-none-any.whl
+keybert==0.8.5
+bert-score==0.3.13

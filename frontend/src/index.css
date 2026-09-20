@@ -1,0 +1,131 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Dark palette (default) — Apple-system-color inspired: near-black depth,
+   translucent panels (paired with backdrop-blur utilities), vivid system
+   blue accent. Values are "R G B" triplets so Tailwind's `/opacity`
+   modifiers work — see tailwind.config.js. */
+:root {
+  --color-ink: 8 8 10;
+  --color-surface: 23 23 26;
+  --color-raised: 36 36 40;
+  --color-line: 255 255 255;
+  --color-paper: 245 245 247;
+  --color-muted: 142 142 150;
+  --color-signal: 10 132 255;
+  --color-signal-dim: 64 130 220;
+  --color-amber: 255 159 10;
+  --color-rust: 255 69 58;
+}
+
+/* Light palette — applied when the OS prefers light and there's no manual
+   override to dark, or when the user manually picks light in Settings. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --color-ink: 242 242 247;
+    --color-surface: 255 255 255;
+    --color-raised: 233 233 238;
+    --color-line: 60 60 67;
+    --color-paper: 28 28 30;
+    --color-muted: 108 108 112;
+    --color-signal: 0 122 255;
+    --color-signal-dim: 90 170 255;
+    --color-amber: 255 149 0;
+    --color-rust: 255 59 48;
+  }
+}
+
+:root[data-theme='light'] {
+  --color-ink: 242 242 247;
+  --color-surface: 255 255 255;
+  --color-raised: 233 233 238;
+  --color-line: 60 60 67;
+  --color-paper: 28 28 30;
+  --color-muted: 108 108 112;
+  --color-signal: 0 122 255;
+  --color-signal-dim: 90 170 255;
+  --color-amber: 255 149 0;
+  --color-rust: 255 59 48;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  background-color: rgb(var(--color-ink));
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, rgb(var(--color-signal) / 0.14), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 100% 10%, rgb(var(--color-signal-dim) / 0.10), transparent 55%);
+  background-attachment: fixed;
+  color: rgb(var(--color-paper));
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* Apple-style frosted glass: translucent panel + blur + hairline border.
+   Use on cards, the top nav, modals — anywhere that should read as "glass"
+   floating above the ambient background gradient. */
+.glass-panel {
+  background: rgb(var(--color-surface) / 0.66);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid rgb(var(--color-line) / 0.12);
+}
+
+.glass-nav {
+  background: rgb(var(--color-surface) / 0.55);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgb(var(--color-line) / 0.12);
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-line) / 0.35);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-signal-dim));
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--color-signal));
+  outline-offset: 2px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.animate-fade-in {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+.animate-pulse-dot {
+  animation: pulse-dot 1.4s ease-in-out infinite;
+}

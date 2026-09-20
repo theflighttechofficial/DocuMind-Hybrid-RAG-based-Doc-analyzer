@@ -1,0 +1,32 @@
+[
+  {
+    "question": "What methodology does the paper use?",
+    "answer": "A hybrid retrieval approach combining BM25 lexical search with dense semantic embeddings, feeding top-ranked chunks to an LLM for grounded answer generation.",
+    "page": 3
+  },
+  {
+    "question": "What weighting is used to combine semantic and lexical scores?",
+    "answer": "0.6 for semantic similarity and 0.4 for lexical relevance.",
+    "page": 3
+  },
+  {
+    "question": "How large was the evaluation dataset?",
+    "answer": "120 question-answer pairs across five source documents.",
+    "page": 4
+  },
+  {
+    "question": "What Precision@5 did hybrid retrieval achieve?",
+    "answer": "0.83",
+    "page": 4
+  },
+  {
+    "question": "What is the main limitation of the approach?",
+    "answer": "It relies on well-structured, extractable text and struggles with scanned or image-only PDFs, and with questions requiring synthesis across many distant sections.",
+    "page": 4
+  },
+  {
+    "question": "Who is the current president of the United States?",
+    "answer": "I couldn't find sufficient information in the uploaded document to answer this question.",
+    "page": null
+  }
+]
