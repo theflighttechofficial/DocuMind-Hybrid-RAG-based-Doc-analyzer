@@ -123,6 +123,10 @@ def ask_document_stream(
 
     retrieval_query = _build_retrieval_query(payload.question, history)
     evidence = retrieve(document_id, retrieval_query, chunks, bm25, method="hybrid", top_k=settings.top_k_retrieval, rerank=True)
+    # The request's DB session is closed before the stream body runs, so load
+    # every lazy relationship the prompt/evidence builders touch right now.
+    for item in evidence:
+        _ = item["chunk"].parent, item["chunk"].document
 
     def event_stream():
         yield f"data: {json.dumps({'type': 'conversation', 'conversation_id': conversation_id})}\n\n"
