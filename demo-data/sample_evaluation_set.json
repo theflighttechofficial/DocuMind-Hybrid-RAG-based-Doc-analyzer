@@ -1,32 +1,967 @@
-[
+{
+ "description": "DocuMind evaluation set. Every answer and evidence quote was checked by hand against the source file. 'evidence' holds verbatim quotes (whitespace-insensitive) that a correct retrieval must surface; a retrieved chunk counts as relevant when it contains one of them. 'must_contain' lists the key facts an answer has to state to be counted correct. 'follow_up_of' chains a question onto an earlier one in the same conversation. 'documents' with more than one entry are cross-document questions run through a workspace.",
+ "documents": {
+  "hybrid_paper": "research_paper_hybrid_retrieval.txt",
+  "regs_2025": "university_regulations_2025.txt",
+  "regs_2026": "university_regulations_2026.txt",
+  "attention_paper": "attention_is_all_you_need.pdf"
+ },
+ "questions": [
   {
-    "question": "What methodology does the paper use?",
-    "answer": "A hybrid retrieval approach combining BM25 lexical search with dense semantic embeddings, feeding top-ranked chunks to an LLM for grounded answer generation.",
-    "page": 3
+   "id": "hp01",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "factual",
+   "question": "What methodology does the paper use?",
+   "answer": "A hybrid retrieval approach combining BM25 lexical search with dense semantic embeddings, feeding top-ranked chunks to an LLM for grounded answer generation.",
+   "must_contain": [
+    "BM25"
+   ],
+   "evidence": [
+    "both indices are queried independently"
+   ]
   },
   {
-    "question": "What weighting is used to combine semantic and lexical scores?",
-    "answer": "0.6 for semantic similarity and 0.4 for lexical relevance.",
-    "page": 3
+   "id": "hp02",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "What weighting is used to combine semantic and lexical scores?",
+   "answer": "0.6 for semantic similarity and 0.4 for lexical relevance.",
+   "must_contain": [
+    "0.6",
+    "0.4"
+   ],
+   "evidence": [
+    "weights of 0.6 for semantic similarity"
+   ]
   },
   {
-    "question": "How large was the evaluation dataset?",
-    "answer": "120 question-answer pairs across five source documents.",
-    "page": 4
+   "id": "hp03",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "How large was the evaluation dataset?",
+   "answer": "120 question-answer pairs across five source documents.",
+   "must_contain": [
+    "120"
+   ],
+   "evidence": [
+    "evaluation dataset of 120 question-answer pairs"
+   ]
   },
   {
-    "question": "What Precision@5 did hybrid retrieval achieve?",
-    "answer": "0.83",
-    "page": 4
+   "id": "hp04",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "hp03",
+   "question": "How many source documents was it drawn from?",
+   "answer": "Five source documents: two academic papers, two university regulation documents, and one technical manual.",
+   "must_contain": [
+    "five"
+   ],
+   "evidence": [
+    "manually\nverified against five source documents"
+   ]
   },
   {
-    "question": "What is the main limitation of the approach?",
-    "answer": "It relies on well-structured, extractable text and struggles with scanned or image-only PDFs, and with questions requiring synthesis across many distant sections.",
-    "page": 4
+   "id": "hp05",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "What Precision@5 did hybrid retrieval achieve?",
+   "answer": "0.83",
+   "must_contain": [
+    "0.83"
+   ],
+   "evidence": [
+    "Precision@5 of 0.83"
+   ]
   },
   {
-    "question": "Who is the current president of the United States?",
-    "answer": "I couldn't find sufficient information in the uploaded document to answer this question.",
-    "page": null
+   "id": "hp06",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "hp05",
+   "question": "And how did the BM25-only baseline do on that metric?",
+   "answer": "The BM25-only baseline reached a Precision@5 of 0.68.",
+   "must_contain": [
+    "0.68"
+   ],
+   "evidence": [
+    "BM25-only baseline (Precision@5 of 0.68)"
+   ]
+  },
+  {
+   "id": "hp07",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "factual",
+   "question": "What is the main limitation of the approach?",
+   "answer": "It relies on well-structured source documents; scanned or image-only PDFs need a separate OCR pipeline, and it struggles with questions that need synthesis across many distant sections.",
+   "must_contain": [
+    "OCR"
+   ],
+   "evidence": [
+    "reliance on well-structured"
+   ]
+  },
+  {
+   "id": "hp08",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "How many words are in each chunk?",
+   "answer": "Approximately 220 words.",
+   "must_contain": [
+    "220"
+   ],
+   "evidence": [
+    "overlapping chunks of\napproximately 220 words"
+   ]
+  },
+  {
+   "id": "hp09",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "What is the dimensionality of the embedding vectors?",
+   "answer": "384-dimensional vectors.",
+   "must_contain": [
+    "384"
+   ],
+   "evidence": [
+    "384-dimensional vectors"
+   ]
+  },
+  {
+   "id": "hp10",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "factual",
+   "question": "What kind of index is used for nearest-neighbor search?",
+   "answer": "A FAISS flat index for exact nearest-neighbor search.",
+   "must_contain": [
+    "FAISS"
+   ],
+   "evidence": [
+    "FAISS flat index for exact nearest-neighbor search"
+   ]
+  },
+  {
+   "id": "hp11",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "What token-level F1 did answers from hybrid-retrieved context achieve?",
+   "answer": "0.74, compared with 0.68 for semantic-only retrieval.",
+   "must_contain": [
+    "0.74"
+   ],
+   "evidence": [
+    "token-level F1 score of 0.74"
+   ]
+  },
+  {
+   "id": "hp12",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "multi-hop",
+   "question": "Which retrieval method had the lowest Mean Reciprocal Rank, and how far below hybrid retrieval was it?",
+   "answer": "BM25-only retrieval, with an MRR of 0.71 versus 0.89 for hybrid retrieval, a gap of 0.18.",
+   "must_contain": [
+    "0.71",
+    "0.89"
+   ],
+   "evidence": [
+    "hybrid retrieval scoring 0.89 compared to 0.81"
+   ]
+  },
+  {
+   "id": "hp13",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "factual",
+   "question": "How were the 0.6 and 0.4 weights chosen?",
+   "answer": "By manual tuning on a held-out validation subset rather than a formal hyperparameter search.",
+   "must_contain": [
+    "manual"
+   ],
+   "evidence": [
+    "was chosen based on manual tuning on a held-out validation subset"
+   ]
+  },
+  {
+   "id": "hp14",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "factual",
+   "question": "What future work do the authors suggest?",
+   "answer": "Learned combination weights, reranking models, and evaluation on a broader range of document domains including legal and medical text.",
+   "must_contain": [
+    "reranking"
+   ],
+   "evidence": [
+    "Future work should explore learned combination weights"
+   ]
+  },
+  {
+   "id": "hp15",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "numeric",
+   "question": "What exact match score did hybrid retrieval get?",
+   "answer": "0.31.",
+   "must_contain": [
+    "0.31"
+   ],
+   "evidence": [
+    "at 0.31 for hybrid retrieval"
+   ]
+  },
+  {
+   "id": "hp16",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "Who is the current president of the United States?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "hp17",
+   "documents": [
+    "hybrid_paper"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "Which GPU was used to train the embedding model?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "r501",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "numeric",
+   "question": "What is the minimum attendance requirement?",
+   "answer": "75% in each registered course during a semester.",
+   "must_contain": [
+    "75"
+   ],
+   "evidence": [
+    "minimum attendance of 75%"
+   ]
+  },
+  {
+   "id": "r502",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "r501",
+   "question": "What happens to students who fall below it?",
+   "answer": "They are marked ineligible to sit for the end-semester examination in that course unless a medical exemption was approved by the Dean of Academic Affairs at least two weeks before the exams.",
+   "must_contain": [
+    "ineligible"
+   ],
+   "evidence": [
+    "will be marked ineligible to sit for the end-semester examination"
+   ]
+  },
+  {
+   "id": "r503",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "numeric",
+   "question": "How are final grades weighted?",
+   "answer": "30% continuous assessment, 20% mid-semester examination, and 50% end-semester examination.",
+   "must_contain": [
+    "30%",
+    "20%",
+    "50%"
+   ],
+   "evidence": [
+    "30% continuous\nassessment, 20% mid-semester examination"
+   ]
+  },
+  {
+   "id": "r504",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "numeric",
+   "question": "What aggregate score is needed to pass a course?",
+   "answer": "A minimum aggregate score of 40%.",
+   "must_contain": [
+    "40%"
+   ],
+   "evidence": [
+    "minimum aggregate score of 40%"
+   ]
+  },
+  {
+   "id": "r505",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "numeric",
+   "question": "How long do students have to appeal a grade?",
+   "answer": "10 working days from the result being published.",
+   "must_contain": [
+    "10"
+   ],
+   "evidence": [
+    "within 10 working days"
+   ]
+  },
+  {
+   "id": "r506",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "factual",
+   "question": "Who approves medical exemptions from the attendance rule?",
+   "answer": "The Dean of Academic Affairs.",
+   "must_contain": [
+    "Dean of Academic Affairs"
+   ],
+   "evidence": [
+    "approved by the Dean of Academic\nAffairs"
+   ]
+  },
+  {
+   "id": "r507",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "multi-hop",
+   "question": "What two conditions must a student meet to be eligible for the final examination?",
+   "answer": "Satisfy the minimum attendance requirement and clear all outstanding fee payments by the date in the academic calendar.",
+   "must_contain": [
+    "attendance",
+    "fee"
+   ],
+   "evidence": [
+    "cleared all outstanding fee\npayments"
+   ]
+  },
+  {
+   "id": "r508",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "multi-hop",
+   "question": "Together, how much of the final grade comes from components other than the end-semester examination?",
+   "answer": "50%: 30% continuous assessment plus 20% mid-semester examination.",
+   "must_contain": [
+    "50%"
+   ],
+   "evidence": [
+    "30% continuous\nassessment, 20% mid-semester examination"
+   ]
+  },
+  {
+   "id": "r509",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "factual",
+   "question": "Do approved leaves count against the attendance requirement?",
+   "answer": "No, approved leaves do not count against the minimum attendance requirement.",
+   "must_contain": [
+    "not"
+   ],
+   "evidence": [
+    "Approved leaves do not count against the minimum attendance"
+   ]
+  },
+  {
+   "id": "r510",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "factual",
+   "question": "Where must a leave of absence longer than two weeks be requested?",
+   "answer": "A formal request to the Registrar, with supporting documentation.",
+   "must_contain": [
+    "Registrar"
+   ],
+   "evidence": [
+    "submit a formal request to the Registrar"
+   ]
+  },
+  {
+   "id": "r511",
+   "documents": [
+    "regs_2025"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "What is the tuition fee per semester?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "r601",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "numeric",
+   "question": "What is the minimum attendance requirement?",
+   "answer": "80% in each registered course during a semester.",
+   "must_contain": [
+    "80"
+   ],
+   "evidence": [
+    "minimum attendance of 80%"
+   ]
+  },
+  {
+   "id": "r602",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "r601",
+   "question": "Why was it changed?",
+   "answer": "It was raised from 75% following a review by the Academic Senate.",
+   "must_contain": [
+    "Academic Senate"
+   ],
+   "evidence": [
+    "following a review by the Academic Senate"
+   ]
+  },
+  {
+   "id": "r603",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "factual",
+   "question": "How can grade appeals be submitted?",
+   "answer": "In writing to the Examination Cell within 15 working days, either physically or through the online student portal.",
+   "must_contain": [
+    "portal"
+   ],
+   "evidence": [
+    "online student portal"
+   ]
+  },
+  {
+   "id": "r604",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "factual",
+   "question": "What penalties can academic integrity violations lead to?",
+   "answer": "Penalties ranging from a grade reduction to expulsion, after referral to the Academic Integrity Committee.",
+   "must_contain": [
+    "expulsion"
+   ],
+   "evidence": [
+    "ranging from a grade reduction to expulsion"
+   ]
+  },
+  {
+   "id": "r605",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "numeric",
+   "question": "What weight does the mid-semester examination carry?",
+   "answer": "25%.",
+   "must_contain": [
+    "25%"
+   ],
+   "evidence": [
+    "25% mid-semester examination"
+   ]
+  },
+  {
+   "id": "r606",
+   "documents": [
+    "regs_2026"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "When does the 2026 academic calendar begin?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "at01",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What BLEU score does the Transformer achieve on WMT 2014 English-to-German?",
+   "answer": "28.4 BLEU.",
+   "must_contain": [
+    "28.4"
+   ],
+   "evidence": [
+    "establishing a new state-of-the-art BLEU score of 28.4"
+   ]
+  },
+  {
+   "id": "at02",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "at01",
+   "question": "How long did that model take to train?",
+   "answer": "3.5 days on 8 P100 GPUs.",
+   "must_contain": [
+    "3.5 days"
+   ],
+   "evidence": [
+    "Training took 3.5 days on 8 P100 GPUs"
+   ]
+  },
+  {
+   "id": "at03",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "How many identical layers are in the encoder stack?",
+   "answer": "N = 6 identical layers.",
+   "must_contain": [
+    "6"
+   ],
+   "evidence": [
+    "The encoder is composed of a stack of N = 6 identical layers"
+   ]
+  },
+  {
+   "id": "at04",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "follow-up",
+   "follow_up_of": "at03",
+   "question": "What about the decoder, and what extra sub-layer does it add?",
+   "answer": "The decoder also has N = 6 identical layers and adds a third sub-layer that performs multi-head attention over the encoder stack's output.",
+   "must_contain": [
+    "6",
+    "encoder"
+   ],
+   "evidence": [
+    "the decoder inserts a third sub-layer"
+   ]
+  },
+  {
+   "id": "at05",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "How many attention heads does the base model use, and what is the dimension of each head?",
+   "answer": "h = 8 heads, each with dk = dv = 64.",
+   "must_contain": [
+    "8",
+    "64"
+   ],
+   "evidence": [
+    "In this work we employ h = 8 parallel attention layers"
+   ]
+  },
+  {
+   "id": "at06",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What is the inner-layer dimensionality of the position-wise feed-forward network?",
+   "answer": "dff = 2048.",
+   "must_contain": [
+    "2048"
+   ],
+   "evidence": [
+    "the inner-layer has dimensionality"
+   ]
+  },
+  {
+   "id": "at07",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What warmup_steps value was used for the learning rate schedule?",
+   "answer": "warmup_steps = 4000.",
+   "must_contain": [
+    "4000"
+   ],
+   "evidence": [
+    "warmup_steps = 4000"
+   ]
+  },
+  {
+   "id": "at08",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What label smoothing value was used during training?",
+   "answer": "0.1.",
+   "must_contain": [
+    "0.1"
+   ],
+   "evidence": [
+    "we employed label smoothing of value"
+   ]
+  },
+  {
+   "id": "at09",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "factual",
+   "question": "What hardware were the models trained on?",
+   "answer": "One machine with 8 NVIDIA P100 GPUs.",
+   "must_contain": [
+    "P100"
+   ],
+   "evidence": [
+    "We trained our models on one machine with 8 NVIDIA P100 GPUs"
+   ]
+  },
+  {
+   "id": "at10",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "multi-hop",
+   "question": "How many training steps did the big model run, and how long did each step take?",
+   "answer": "300,000 steps at 1.0 seconds per step (3.5 days).",
+   "must_contain": [
+    "300,000",
+    "1.0"
+   ],
+   "evidence": [
+    "The big models were trained for 300,000 steps"
+   ]
+  },
+  {
+   "id": "at11",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What F1 does the 4-layer Transformer reach on WSJ Section 23 in the semi-supervised setting?",
+   "answer": "92.7.",
+   "must_contain": [
+    "92.7"
+   ],
+   "evidence": [
+    "Transformer (4 layers)\nsemi-supervised\n92.7"
+   ]
+  },
+  {
+   "id": "at12",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "factual",
+   "question": "Which model still beats the Transformer on English constituency parsing?",
+   "answer": "The Recurrent Neural Network Grammar.",
+   "must_contain": [
+    "Recurrent Neural Network Grammar"
+   ],
+   "evidence": [
+    "with the exception of the\nRecurrent Neural Network Grammar"
+   ]
+  },
+  {
+   "id": "at13",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What is the complexity per layer of self-attention according to Table 1?",
+   "answer": "O(n^2 · d).",
+   "must_contain": [
+    "n"
+   ],
+   "evidence": [
+    "Maximum path lengths, per-layer complexity"
+   ]
+  },
+  {
+   "id": "at14",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "How large is the English-German training dataset?",
+   "answer": "About 4.5 million sentence pairs.",
+   "must_contain": [
+    "4.5 million"
+   ],
+   "evidence": [
+    "consisting of about 4.5 million"
+   ]
+  },
+  {
+   "id": "at15",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "multi-hop",
+   "question": "What beam size and length penalty were used for translation, and how did they differ for parsing?",
+   "answer": "Translation used beam size 4 with alpha = 0.6; parsing used beam size 21 with alpha = 0.3.",
+   "must_contain": [
+    "4",
+    "21"
+   ],
+   "evidence": [
+    "We\nused beam search with a beam size of 4",
+    "We used a beam size of 21"
+   ]
+  },
+  {
+   "id": "at16",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "factual",
+   "question": "Why did the authors choose sinusoidal positional encodings over learned ones?",
+   "answer": "Because it may let the model extrapolate to sequence lengths longer than those seen during training; learned embeddings gave nearly identical results.",
+   "must_contain": [
+    "extrapolate"
+   ],
+   "evidence": [
+    "because it may allow the model to extrapolate"
+   ]
+  },
+  {
+   "id": "at17",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "What BLEU score does GPT-4 get on WMT 2014?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "at18",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "out-of-document",
+   "answerable": false,
+   "question": "How many parameters does BERT-large have?",
+   "answer": null,
+   "must_contain": [],
+   "evidence": []
+  },
+  {
+   "id": "at19",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "table",
+   "question": "According to Table 2, what EN-FR BLEU score does the Transformer base model get?",
+   "answer": "38.1.",
+   "must_contain": [
+    "38.1"
+   ],
+   "evidence": [
+    "Transformer (base model) 27.3 38.1"
+   ]
+  },
+  {
+   "id": "at20",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "table",
+   "question": "In Table 3, what dev-set BLEU does the big model reach and how many parameters does it have?",
+   "answer": "26.4 BLEU with 213 million parameters.",
+   "must_contain": [
+    "26.4",
+    "213"
+   ],
+   "evidence": [
+    "300K 4.33 26.4 213"
+   ]
+  },
+  {
+   "id": "at21",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "table",
+   "question": "What EN-DE BLEU score does ByteNet get in Table 2?",
+   "answer": "23.75.",
+   "must_contain": [
+    "23.75"
+   ],
+   "evidence": [
+    "ByteNet [18] 23.75"
+   ]
+  },
+  {
+   "id": "at22",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "table",
+   "question": "Which parser in Table 4 has the highest WSJ 23 F1, and what is that score?",
+   "answer": "Dyer et al. (2016), generative, with 93.3.",
+   "must_contain": [
+    "Dyer",
+    "93.3"
+   ],
+   "evidence": [
+    "generative 93.3"
+   ]
+  },
+  {
+   "id": "at23",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "numeric",
+   "question": "What dropout rate did the big English-to-French model use?",
+   "answer": "Pdrop = 0.1 instead of 0.3.",
+   "must_contain": [
+    "0.1"
+   ],
+   "evidence": [
+    "used dropout rate Pdrop = 0.1, instead of 0.3"
+   ]
+  },
+  {
+   "id": "at24",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "multi-hop",
+   "question": "By how many BLEU points does Transformer (big) beat the best ensemble on EN-DE in Table 2?",
+   "answer": "28.4 versus 26.36 for the ConvS2S Ensemble, about 2.04 BLEU.",
+   "must_contain": [
+    "28.4",
+    "26.36"
+   ],
+   "evidence": [
+    "ConvS2S Ensemble [9] 26.36"
+   ]
+  },
+  {
+   "id": "at25",
+   "documents": [
+    "attention_paper"
+   ],
+   "type": "factual",
+   "question": "How does the learning rate change after the warmup steps?",
+   "answer": "It decreases proportionally to the inverse square root of the step number.",
+   "must_contain": [
+    "inverse square root"
+   ],
+   "evidence": [
+    "proportionally to the inverse square root of the step number"
+   ]
+  },
+  {
+   "id": "x01",
+   "documents": [
+    "regs_2025",
+    "regs_2026"
+   ],
+   "type": "cross-document",
+   "question": "How did the minimum attendance requirement change between the 2025 and 2026 regulations?",
+   "answer": "It rose from 75% in 2025 to 80% in 2026.",
+   "must_contain": [
+    "75",
+    "80"
+   ],
+   "evidence": [
+    "minimum attendance of 75%",
+    "minimum attendance of 80%"
+   ]
+  },
+  {
+   "id": "x02",
+   "documents": [
+    "regs_2025",
+    "regs_2026"
+   ],
+   "type": "cross-document",
+   "question": "How did the grade appeal deadline change between the two regulation documents?",
+   "answer": "It was extended from 10 working days (2025) to 15 working days (2026).",
+   "must_contain": [
+    "10",
+    "15"
+   ],
+   "evidence": [
+    "within 10 working days",
+    "within 15 working days"
+   ]
+  },
+  {
+   "id": "x03",
+   "documents": [
+    "regs_2025",
+    "regs_2026"
+   ],
+   "type": "cross-document",
+   "question": "What do the 2025 and 2026 regulations have in common about the pass mark?",
+   "answer": "Both require a minimum aggregate score of 40% to pass a course.",
+   "must_contain": [
+    "40%"
+   ],
+   "evidence": [
+    "minimum aggregate score of 40%"
+   ]
+  },
+  {
+   "id": "x04",
+   "documents": [
+    "hybrid_paper",
+    "attention_paper"
+   ],
+   "type": "cross-document",
+   "question": "Which paper reports BLEU scores and which reports Precision@5?",
+   "answer": "The Transformer paper (Attention Is All You Need) reports BLEU; the hybrid retrieval paper reports Precision@5.",
+   "must_contain": [
+    "BLEU",
+    "Precision@5"
+   ],
+   "evidence": [
+    "Precision@5 of 0.83",
+    "establishing a new state-of-the-art BLEU score of 28.4"
+   ]
   }
-]
+ ]
+}

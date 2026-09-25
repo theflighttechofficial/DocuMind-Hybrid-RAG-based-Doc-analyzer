@@ -1,0 +1,4253 @@
+{
+  "label": "baseline",
+  "timestamp": "2026-09-25T11:20:44",
+  "base_url": "http://127.0.0.1:8000",
+  "backend_config": {},
+  "documents": {
+    "ids": {
+      "hybrid_paper": "157373a8-f710-411f-8a60-6636f38079a5",
+      "regs_2025": "3babd96c-51c9-4658-b2b4-96a81bf2b7c7",
+      "regs_2026": "c0939e39-e659-47d5-931f-6aa96a78f469",
+      "attention_paper": "8e96c626-5643-4068-a572-476ae1432f9a"
+    },
+    "processing_seconds": {
+      "hybrid_paper": 28.9,
+      "regs_2025": 1.1,
+      "regs_2026": 1.0,
+      "attention_paper": 5.4
+    }
+  },
+  "summary": {
+    "retrieval": {
+      "bm25": {
+        "hit": 0.65,
+        "recall": 0.65,
+        "precision": 0.1437,
+        "mrr": 0.5646,
+        "n": 40
+      },
+      "semantic": {
+        "hit": 0.925,
+        "recall": 0.925,
+        "precision": 0.3187,
+        "mrr": 0.7583,
+        "n": 40
+      },
+      "hybrid": {
+        "hit": 0.975,
+        "recall": 0.975,
+        "precision": 0.3275,
+        "mrr": 0.8958,
+        "n": 40
+      }
+    },
+    "qa": {
+      "answer_accuracy": 0.98,
+      "token_f1": 0.4694,
+      "semantic_similarity": 0.6276,
+      "context_hit": 0.44,
+      "false_refusal_rate": 0.0,
+      "refusal_accuracy": 1.0,
+      "accuracy_by_type": {
+        "cross-document": 1.0,
+        "factual": 0.9231,
+        "follow-up": 1.0,
+        "multi-hop": 1.0,
+        "numeric": 1.0
+      },
+      "mean_latency_s": 5.9866,
+      "n_answerable": 50,
+      "n_unanswerable": 6,
+      "n_errors": 0
+    }
+  },
+  "questions": [
+    {
+      "id": "hp01",
+      "type": "factual",
+      "question": "What methodology does the paper use?",
+      "answer": "A hybrid retrieval approach combining BM25 lexical search with dense semantic embeddings, feeding top-ranked chunks to an LLM for grounded answer generation.",
+      "must_contain": [
+        "BM25"
+      ],
+      "evidence": [
+        "both indices are queried independently"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            1,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on the provided passages, the methodology involves:\n* Splitting documents into overlapping chunks of approximately 220 words while preserving page and section metadata (Passage 1).\n* Embedding each chunk using a sentence-transformer model to produce 384-dimensional vectors, which are indexed using a FAISS flat index for exact nearest-neighbor search (Passage 1).\n* Building an Okapi BM25 index over the same chunks using standard tokenization in parallel (Passage 1).\n* Querying both indices independently at query time, normalizing semantic and lexical scores to a zero-to-one range, and combining them using a weighted sum of 0.6 for semantic similarity and 0.4 for lexical relevance (Passage 1 & 5).\n* Passing the top-ranked chunks to a large language model along with the user's question, instructing it to answer only from the provided passages and state when information is missing (Passage 1 & 5).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 5.55,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.15384615384615385,
+      "semantic_similarity": 0.6041014194488525,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp02",
+      "type": "numeric",
+      "question": "What weighting is used to combine semantic and lexical scores?",
+      "answer": "0.6 for semantic similarity and 0.4 for lexical relevance.",
+      "must_contain": [
+        "0.6",
+        "0.4"
+      ],
+      "evidence": [
+        "weights of 0.6 for semantic similarity"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 0.5,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 0.5,
+          "pages": [
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      },
+      "prediction": "Based on the provided documents, the semantic similarity score is weighted at 0.6 and the lexical relevance score is weighted at 0.4 (as shown in Passages 1, 2, and 3).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.03,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5517241379310345,
+      "semantic_similarity": 0.7880536317825317,
+      "context_hit": 1.0
+    },
+    {
+      "id": "hp03",
+      "type": "numeric",
+      "question": "How large was the evaluation dataset?",
+      "answer": "120 question-answer pairs across five source documents.",
+      "must_contain": [
+        "120"
+      ],
+      "evidence": [
+        "evaluation dataset of 120 question-answer pairs"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1 and Passage 2, the evaluation dataset consists of 120 question-answer pairs.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.37,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4,
+      "semantic_similarity": 0.6999735832214355,
+      "context_hit": 1.0
+    },
+    {
+      "id": "hp04",
+      "type": "follow-up",
+      "question": "How many source documents was it drawn from?",
+      "answer": "Five source documents: two academic papers, two university regulation documents, and one technical manual.",
+      "must_contain": [
+        "five"
+      ],
+      "evidence": [
+        "manually\nverified against five source documents"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": "hp03",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on Passage 1, the evaluation dataset was verified against five source documents: two academic papers, two university regulation documents, and one technical manual.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 10.56,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.787878787878788,
+      "semantic_similarity": 0.7061208486557007,
+      "context_hit": 1.0
+    },
+    {
+      "id": "hp05",
+      "type": "numeric",
+      "question": "What Precision@5 did hybrid retrieval achieve?",
+      "answer": "0.83",
+      "must_contain": [
+        "0.83"
+      ],
+      "evidence": [
+        "Precision@5 of 0.83"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the hybrid retrieval method achieved a Precision@5 of 0.83.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.55,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.3076923076923077,
+      "semantic_similarity": 0.20108096301555634,
+      "context_hit": 1.0
+    },
+    {
+      "id": "hp06",
+      "type": "follow-up",
+      "question": "And how did the BM25-only baseline do on that metric?",
+      "answer": "The BM25-only baseline reached a Precision@5 of 0.68.",
+      "must_contain": [
+        "0.68"
+      ],
+      "evidence": [
+        "BM25-only baseline (Precision@5 of 0.68)"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": "hp05",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on Passage 1, the BM25-only baseline achieved a Precision@5 of 0.68.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.95,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.7368421052631579,
+      "semantic_similarity": 0.9554533958435059,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp07",
+      "type": "factual",
+      "question": "What is the main limitation of the approach?",
+      "answer": "It relies on well-structured source documents; scanned or image-only PDFs need a separate OCR pipeline, and it struggles with questions that need synthesis across many distant sections.",
+      "must_contain": [
+        "OCR"
+      ],
+      "evidence": [
+        "reliance on well-structured"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            1,
+            2,
+            1,
+            2,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on the provided documents, the main limitations of the approach are:\n\n1. **Reliance on well-structured source documents:** Scanned or image-only PDFs without extractable text require a separate OCR pipeline that was not evaluated in the study (Passage 1 and Passage 4).\n2. **Difficulty with synthesis:** The model struggles with questions that require synthesizing information scattered across many distant sections of a document, because retrieval is limited to a fixed number of top-ranked chunks (Passage 1 and Passage 4).\n3. **Weighting choice:** The weighting between semantic and lexical scores (0.6 and 0.4) was chosen based on manual tuning on a held-out validation subset rather than a formal hyperparameter search, and may not generalize optimally to all document types (Passage 4).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.19,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.3333333333333333,
+      "semantic_similarity": 0.682779848575592,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp08",
+      "type": "numeric",
+      "question": "How many words are in each chunk?",
+      "answer": "Approximately 220 words.",
+      "must_contain": [
+        "220"
+      ],
+      "evidence": [
+        "overlapping chunks of\napproximately 220 words"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            1,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 2, documents are split into overlapping chunks of approximately 220 words.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.71,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.42857142857142855,
+      "semantic_similarity": 0.6101282835006714,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp09",
+      "type": "numeric",
+      "question": "What is the dimensionality of the embedding vectors?",
+      "answer": "384-dimensional vectors.",
+      "must_contain": [
+        "384"
+      ],
+      "evidence": [
+        "384-dimensional vectors"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            2,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, the sentence-transformer model produces 384-dimensional vectors.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 3.05,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.42857142857142855,
+      "semantic_similarity": 0.6103076934814453,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp10",
+      "type": "factual",
+      "question": "What kind of index is used for nearest-neighbor search?",
+      "answer": "A FAISS flat index for exact nearest-neighbor search.",
+      "must_contain": [
+        "FAISS"
+      ],
+      "evidence": [
+        "FAISS flat index for exact nearest-neighbor search"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            1,
+            2,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            2,
+            1,
+            2
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, a FAISS flat index is used for exact nearest-neighbor search.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.08,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.7777777777777778,
+      "semantic_similarity": 0.8892441987991333,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp11",
+      "type": "numeric",
+      "question": "What token-level F1 did answers from hybrid-retrieved context achieve?",
+      "answer": "0.74, compared with 0.68 for semantic-only retrieval.",
+      "must_contain": [
+        "0.74"
+      ],
+      "evidence": [
+        "token-level F1 score of 0.74"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, answers generated using hybrid-retrieved context achieved a token-level F1 score of 0.74 against human-reference answers.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.6,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.13333333333333333,
+      "semantic_similarity": 0.4647834300994873,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp12",
+      "type": "multi-hop",
+      "question": "Which retrieval method had the lowest Mean Reciprocal Rank, and how far below hybrid retrieval was it?",
+      "answer": "BM25-only retrieval, with an MRR of 0.71 versus 0.89 for hybrid retrieval, a gap of 0.18.",
+      "must_contain": [
+        "0.71",
+        "0.89"
+      ],
+      "evidence": [
+        "hybrid retrieval scoring 0.89 compared to 0.81"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the BM25-only retrieval method had the lowest Mean Reciprocal Rank, scoring 0.71. This was 0.18 below the hybrid retrieval method, which scored 0.89.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.71,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5365853658536585,
+      "semantic_similarity": 0.7763622999191284,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp13",
+      "type": "factual",
+      "question": "How were the 0.6 and 0.4 weights chosen?",
+      "answer": "By manual tuning on a held-out validation subset rather than a formal hyperparameter search.",
+      "must_contain": [
+        "manual"
+      ],
+      "evidence": [
+        "was chosen based on manual tuning on a held-out validation subset"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the 0.6 and 0.4 weights were chosen based on manual tuning on a held-out validation subset rather than a formal hyperparameter search.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.7,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.6666666666666667,
+      "semantic_similarity": 0.6221371293067932,
+      "context_hit": 1.0
+    },
+    {
+      "id": "hp14",
+      "type": "factual",
+      "question": "What future work do the authors suggest?",
+      "answer": "Learned combination weights, reranking models, and evaluation on a broader range of document domains including legal and medical text.",
+      "must_contain": [
+        "rerank"
+      ],
+      "evidence": [
+        "Future work should explore learned combination weights"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the authors suggest that future work should explore:\n* Learned combination weights\n* Reranking models\n* Evaluation on a broader range of document domains, including legal and medical text.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.94,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 0.0,
+      "f1": 0.7368421052631579,
+      "semantic_similarity": 0.9551736116409302,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp15",
+      "type": "numeric",
+      "question": "What exact match score did hybrid retrieval get?",
+      "answer": "0.31.",
+      "must_contain": [
+        "0.31"
+      ],
+      "evidence": [
+        "at 0.31 for hybrid retrieval"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, hybrid retrieval achieved an exact match score of 0.31.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.02,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": null,
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "A Hybrid Approach to Document Question Answering Using Transformer-Based Retrieval Abstract Large documents contain valuable information, but conventional keyword search forces users to manually locate and interpret relevant passages. This paper proposes a hybrid retrieval-augmented question answeri"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "where lexical methods such as BM25 remain valuable. This paper investigates whether combining both approaches, a method we refer to as hybrid retrieval, produces measurably better question answering results than either method in isolation. Related Work Retrieval-augmented generation (RAG) systems ty"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "separate OCR pipeline not evaluated in this study. The model also struggles with questions that require synthesizing information scattered across many distant sections of a document, since retrieval is limited to a fixed number of top-ranked chunks. Additionally, the weighting between semantic and l"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "scores are each normalized to a zero-to-one range, then combined using a weighted sum with weights of 0.6 for semantic similarity and 0.4 for lexical relevance. The top-ranked chunks are passed to a large language model along with the user's question, with an explicit instruction to answer only from"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.3076923076923077,
+      "semantic_similarity": 0.27691441774368286,
+      "context_hit": 0.0
+    },
+    {
+      "id": "hp16",
+      "type": "out-of-document",
+      "question": "Who is the current president of the United States?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 3.43,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "hp17",
+      "type": "out-of-document",
+      "question": "Which GPU was used to train the embedding model?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 2.26,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "r501",
+      "type": "numeric",
+      "question": "What is the minimum attendance requirement?",
+      "answer": "75% in each registered course during a semester.",
+      "must_contain": [
+        "75"
+      ],
+      "evidence": [
+        "minimum attendance of 75%"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "The minimum attendance requirement is 75% in each registered course during a semester, as stated in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.62,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.631578947368421,
+      "semantic_similarity": 0.7306274771690369,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r502",
+      "type": "follow-up",
+      "question": "What happens to students who fall below it?",
+      "answer": "They are marked ineligible to sit for the end-semester examination in that course unless a medical exemption was approved by the Dean of Academic Affairs at least two weeks before the exams.",
+      "must_contain": [
+        "ineligible"
+      ],
+      "evidence": [
+        "will be marked ineligible to sit for the end-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": "r501",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Students who fall below the minimum attendance requirement are marked ineligible to sit for the end-semester examination in that course and will not be permitted to sit for it, unless an approved medical exemption is obtained from the Dean of Academic Affairs at least two weeks before the examination period begins. Additionally, students who fail to satisfy this requirement will be required to repeat the course in a subsequent semester, as stated in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.61,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4935064935064935,
+      "semantic_similarity": 0.8809278011322021,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r503",
+      "type": "numeric",
+      "question": "How are final grades weighted?",
+      "answer": "30% continuous assessment, 20% mid-semester examination, and 50% end-semester examination.",
+      "must_contain": [
+        "30%",
+        "20%",
+        "50%"
+      ],
+      "evidence": [
+        "30% continuous\nassessment, 20% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, final grades are weighted as follows:\n- 30% continuous assessment\n- 20% mid-semester examination\n- 50% end-semester examination",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.54,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.7096774193548387,
+      "semantic_similarity": 0.7497190237045288,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r504",
+      "type": "numeric",
+      "question": "What aggregate score is needed to pass a course?",
+      "answer": "A minimum aggregate score of 40%.",
+      "must_contain": [
+        "40%"
+      ],
+      "evidence": [
+        "minimum aggregate score of 40%"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "A minimum aggregate score of 40% is required to pass a course, as stated in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.89,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5333333333333333,
+      "semantic_similarity": 0.7310301065444946,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r505",
+      "type": "numeric",
+      "question": "How long do students have to appeal a grade?",
+      "answer": "10 working days from the result being published.",
+      "must_contain": [
+        "10"
+      ],
+      "evidence": [
+        "within 10 working days"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Students must submit a written appeal to contest a grade within 10 working days of the result being published (as shown in Passage 1 and Passage 2).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.19,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4444444444444444,
+      "semantic_similarity": 0.5621805191040039,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r506",
+      "type": "factual",
+      "question": "Who approves medical exemptions from the attendance rule?",
+      "answer": "The Dean of Academic Affairs.",
+      "must_contain": [
+        "Dean of Academic Affairs"
+      ],
+      "evidence": [
+        "approved by the Dean of Academic\nAffairs"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Medical exemptions from the attendance rule are approved by the Dean of Academic Affairs, as shown in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.92,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.35294117647058826,
+      "semantic_similarity": 0.4368145167827606,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r507",
+      "type": "multi-hop",
+      "question": "What two conditions must a student meet to be eligible for the final examination?",
+      "answer": "Satisfy the minimum attendance requirement and clear all outstanding fee payments by the date in the academic calendar.",
+      "must_contain": [
+        "attendance",
+        "fee"
+      ],
+      "evidence": [
+        "cleared all outstanding fee\npayments"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, a student must meet the following two conditions to be eligible for the final examination:\n\n1. Satisfy the minimum attendance requirement (maintaining a minimum attendance of 75% in each registered course, or obtaining an approved medical exemption).\n2. Clear all outstanding fee payments by the date specified in the academic calendar.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.15,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4905660377358491,
+      "semantic_similarity": 0.6884689927101135,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r508",
+      "type": "multi-hop",
+      "question": "Together, how much of the final grade comes from components other than the end-semester examination?",
+      "answer": "50%: 30% continuous assessment plus 20% mid-semester examination.",
+      "must_contain": [
+        "50%"
+      ],
+      "evidence": [
+        "30% continuous\nassessment, 20% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the final grade is computed using 30% continuous assessment and 20% mid-semester examination. Together, these components account for 50% of the final grade (other than the end-semester examination).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 5.7,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4571428571428572,
+      "semantic_similarity": 0.8075017929077148,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r509",
+      "type": "factual",
+      "question": "Do approved leaves count against the attendance requirement?",
+      "answer": "No, approved leaves do not count against the minimum attendance requirement.",
+      "must_contain": [
+        "not"
+      ],
+      "evidence": [
+        "Approved leaves do not count against the minimum attendance"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "No, approved leaves do not count against the minimum attendance requirement, as stated in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.84,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.8333333333333333,
+      "semantic_similarity": 0.9906636476516724,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r510",
+      "type": "factual",
+      "question": "Where must a leave of absence longer than two weeks be requested?",
+      "answer": "A formal request to the Registrar, with supporting documentation.",
+      "must_contain": [
+        "Registrar"
+      ],
+      "evidence": [
+        "submit a formal request to the Registrar"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 1.0,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 1.0,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "An extended leave of absence exceeding two weeks must be requested by submitting a formal request to the Registrar, as stated in Passage 1 and Passage 2.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.32,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.23076923076923075,
+      "semantic_similarity": 0.44484958052635193,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r511",
+      "type": "out-of-document",
+      "question": "What is the tuition fee per semester?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 1.38,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "r601",
+      "type": "numeric",
+      "question": "What is the minimum attendance requirement?",
+      "answer": "80% in each registered course during a semester.",
+      "must_contain": [
+        "80"
+      ],
+      "evidence": [
+        "minimum attendance of 80%"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "The minimum attendance requirement is 80% in each registered course during a semester, as stated in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.58,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.631578947368421,
+      "semantic_similarity": 0.728969156742096,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r602",
+      "type": "follow-up",
+      "question": "Why was it changed?",
+      "answer": "It was raised from 75% following a review by the Academic Senate.",
+      "must_contain": [
+        "Academic Senate"
+      ],
+      "evidence": [
+        "following a review by the Academic Senate"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": "r601",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "As stated in Passage 1, the attendance requirement threshold was raised following a review by the Academic Senate.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.23,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5454545454545455,
+      "semantic_similarity": 0.6241616010665894,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r603",
+      "type": "factual",
+      "question": "How can grade appeals be submitted?",
+      "answer": "In writing to the Examination Cell within 15 working days, either physically or through the online student portal.",
+      "must_contain": [
+        "portal"
+      ],
+      "evidence": [
+        "online student portal"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 1.0,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 1.0,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on the provided documents, grade appeals can be submitted as a written appeal to the Examination Cell either physically or through the online student portal (Passage 1, Passage 2).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.98,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4444444444444444,
+      "semantic_similarity": 0.4768752455711365,
+      "context_hit": 1.0
+    },
+    {
+      "id": "r604",
+      "type": "factual",
+      "question": "What penalties can academic integrity violations lead to?",
+      "answer": "Penalties ranging from a grade reduction to expulsion, after referral to the Academic Integrity Committee.",
+      "must_contain": [
+        "expulsion"
+      ],
+      "evidence": [
+        "ranging from a grade reduction to expulsion"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, academic integrity violations may result in penalties ranging from a grade reduction to expulsion.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 3.03,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.64,
+      "semantic_similarity": 0.8707146644592285,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r605",
+      "type": "numeric",
+      "question": "What weight does the mid-semester examination carry?",
+      "answer": "25%.",
+      "must_contain": [
+        "25%"
+      ],
+      "evidence": [
+        "25% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": []
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.5,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1
+          ]
+        }
+      },
+      "prediction": "The mid-semester examination carries a weight of 25%, as shown in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.18,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": null,
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.18181818181818182,
+      "semantic_similarity": 0.4075636863708496,
+      "context_hit": 0.0
+    },
+    {
+      "id": "r606",
+      "type": "out-of-document",
+      "question": "When does the 2026 academic calendar begin?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 0.1,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "at01",
+      "type": "numeric",
+      "question": "What BLEU score does the Transformer achieve on WMT 2014 English-to-German?",
+      "answer": "28.4 BLEU.",
+      "must_contain": [
+        "28.4"
+      ],
+      "evidence": [
+        "establishing a new state-of-the-art BLEU score of 28.4"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            1,
+            8,
+            10,
+            7
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            9,
+            8,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            1,
+            10,
+            1
+          ]
+        }
+      },
+      "prediction": "Based on the provided documents, the Transformer achieves a BLEU score of 28.4 on the WMT 2014 English-to-German translation task (as shown in Passage 1, Passage 3, and Table 2 in Passage 2).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.67,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.comNoam Shazeer∗ Google Brain noam@google.comNiki Parma"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "contrast to RNN sequence-to-sequence models [ 37], the Transformer outperforms the Berkeley- Parser [29] even when training only on the WSJ training set of 40K sentences. 7 Conclusion In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, repla"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to Eng"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.21428571428571425,
+      "semantic_similarity": 0.38739287853240967,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at02",
+      "type": "follow-up",
+      "question": "How long did that model take to train?",
+      "answer": "3.5 days on 8 P100 GPUs.",
+      "must_contain": [
+        "3.5 days"
+      ],
+      "evidence": [
+        "Training took 3.5 days on 8 P100 GPUs"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": "at01",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on the provided documents, the big Transformer model trained for 3.5 days on 8 P100 GPUs (as shown in Passage 1).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.53,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.comNoam Shazeer∗ Google Brain noam@google.comNiki Parma"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to Eng"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "contrast to RNN sequence-to-sequence models [ 37], the Transformer outperforms the Berkeley- Parser [29] even when training only on the WSJ training set of 40K sentences. 7 Conclusion In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, repla"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5217391304347826,
+      "semantic_similarity": 0.6665006875991821,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at03",
+      "type": "numeric",
+      "question": "How many identical layers are in the encoder stack?",
+      "answer": "N = 6 identical layers.",
+      "must_contain": [
+        "6"
+      ],
+      "evidence": [
+        "The encoder is composed of a stack of N = 6 identical layers"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            3,
+            3,
+            7,
+            9,
+            6
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            3,
+            3,
+            6,
+            2,
+            5
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            3,
+            5,
+            3,
+            5,
+            8
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the encoder is composed of a stack of $N = 6$ identical layers.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 6.84,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 3,
+          "document": null,
+          "text": "Figure 1: The Transformer - model architecture. The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively. 3.1 Encoder and Decoder Stacks Encoder"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "encoder-decoder attention mechanisms in sequence-to-sequence models such as [38, 2, 9]. •The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in"
+        },
+        {
+          "page": 3,
+          "document": null,
+          "text": "output of the encoder stack. Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined wit"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhib"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 15,
+          "document": null,
+          "text": "Input-Input Layer5 The Law will never be perfect , but its application should be just - this is what we are missing , in my opinion . <EOS> <pad> The Law will never be perfect , but its application should be just - this is what we are missing , in my opinion . <EOS> <pad> Input-Input Layer5 The Law "
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5714285714285715,
+      "semantic_similarity": 0.6408759355545044,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at04",
+      "type": "follow-up",
+      "question": "What about the decoder, and what extra sub-layer does it add?",
+      "answer": "The decoder also has N = 6 identical layers and adds a third sub-layer that performs multi-head attention over the encoder stack's output.",
+      "must_contain": [
+        "6",
+        "encoder"
+      ],
+      "evidence": [
+        "the decoder inserts a third sub-layer"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": "at03",
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on Passage 1, the decoder is also composed of a stack of $N = 6$ identical layers. In addition to the two sub-layers found in each encoder layer, the decoder inserts a third sub-layer that performs multi-head attention over the output of the encoder stack.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.38,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 3,
+          "document": null,
+          "text": "Figure 1: The Transformer - model architecture. The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively. 3.1 Encoder and Decoder Stacks Encoder"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "encoder-decoder attention mechanisms in sequence-to-sequence models such as [38, 2, 9]. •The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in"
+        },
+        {
+          "page": 3,
+          "document": null,
+          "text": "output of the encoder stack. Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined wit"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhib"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 6,
+          "document": null,
+          "text": "iis the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2πto10000 ·2π. We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fix"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.6666666666666665,
+      "semantic_similarity": 0.9570268988609314,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at05",
+      "type": "numeric",
+      "question": "How many attention heads does the base model use, and what is the dimension of each head?",
+      "answer": "h = 8 heads, each with dk = dv = 64.",
+      "must_contain": [
+        "8",
+        "64"
+      ],
+      "evidence": [
+        "In this work we employ h = 8 parallel attention layers"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            15,
+            5,
+            14,
+            6,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            14,
+            13,
+            3,
+            6
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            9,
+            5,
+            9,
+            7,
+            4
+          ]
+        }
+      },
+      "prediction": "Based on the provided passages, the model employs $h = 8$ parallel attention layers, or heads, and for each of these, the key and value dimensions are $d_k = d_v = d_{\\text{model}}/h = 64$ (as shown in Passage 2 and Passage 3).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 3.79,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 9,
+          "document": null,
+          "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also dro"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhib"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 4,
+          "document": null,
+          "text": "Scaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel. of the values, where the weight assigned to each value is computed by a compatibility function of the query with the"
+        },
+        {
+          "page": 2,
+          "document": null,
+          "text": "ByteNet. This makes it more difficult to learn dependencies between distant positions [ 12]. In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Hea"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.2564102564102564,
+      "semantic_similarity": 0.5330018997192383,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at06",
+      "type": "numeric",
+      "question": "What is the inner-layer dimensionality of the position-wise feed-forward network?",
+      "answer": "dff = 2048.",
+      "must_contain": [
+        "2048"
+      ],
+      "evidence": [
+        "the inner-layer has dimensionality"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            5,
+            7,
+            3,
+            5,
+            15
+          ]
+        },
+        "semantic": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            3,
+            6,
+            3,
+            5,
+            6
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            3,
+            7,
+            5,
+            5,
+            7
+          ]
+        }
+      },
+      "prediction": "Based on Passage 3, the inner-layer has a dimensionality of $d_{ff} = 2048$.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.06,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 3,
+          "document": null,
+          "text": "Figure 1: The Transformer - model architecture. The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively. 3.1 Encoder and Decoder Stacks Encoder"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "length nis smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [38] and byte-pair [ 31] representations. To improve computational performance for tasks involving very "
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "max(0 , xW 1+b1)W2+b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512 , and the inner-laye"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "encoder-decoder attention mechanisms in sequence-to-sequence models such as [38, 2, 9]. •The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 4,
+          "document": null,
+          "text": "compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efficient in practice, since it can be implemented using highly optimized matrix multiplication code. While for sma"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.16666666666666669,
+      "semantic_similarity": 0.36390751600265503,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at07",
+      "type": "numeric",
+      "question": "What warmup_steps value was used for the learning rate schedule?",
+      "answer": "warmup_steps = 4000.",
+      "must_contain": [
+        "4000"
+      ],
+      "evidence": [
+        "warmup_steps = 4000"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            14,
+            15,
+            7,
+            8
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            8,
+            9,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            9,
+            7
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, a `warmup_steps` value of 4000 was used for the learning rate schedule.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 39.26,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 7,
+          "document": null,
+          "text": "with 8 NVIDIA P100 GPUs. For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 secon"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 11,
+          "document": null,
+          "text": "[5]Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for statistical machine translation. CoRR , abs/1406.1078, 2014. [6]Francois Chollet. Xception: Deep learning with depthwise separable"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.4,
+      "semantic_similarity": 0.6573858261108398,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at08",
+      "type": "numeric",
+      "question": "What label smoothing value was used during training?",
+      "answer": "0.1.",
+      "must_contain": [
+        "0.1"
+      ],
+      "evidence": [
+        "we employed label smoothing of value"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            7,
+            14,
+            15,
+            8
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            7,
+            8,
+            8,
+            9,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            6,
+            8,
+            9
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, a label smoothing value of $\\epsilon_{ls} = 0.1$ was used during training.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 9.1,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "hyperparameters were chosen after experimentation on the development set. We set the maximum output length during inference to input length + 50, but terminate early when possible [38]. Table 2 summarizes our results and compares our translation quality and training costs to other model architecture"
+        },
+        {
+          "page": 6,
+          "document": null,
+          "text": "iis the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2πto10000 ·2π. We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fix"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "with 8 NVIDIA P100 GPUs. For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 secon"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.2666666666666667,
+      "semantic_similarity": 0.2738837003707886,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at09",
+      "type": "factual",
+      "question": "What hardware were the models trained on?",
+      "answer": "One machine with 8 NVIDIA P100 GPUs.",
+      "must_contain": [
+        "P100"
+      ],
+      "evidence": [
+        "We trained our models on one machine with 8 NVIDIA P100 GPUs"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            15,
+            14
+          ]
+        },
+        "semantic": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            8,
+            8,
+            3,
+            7,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            8,
+            7,
+            7,
+            9,
+            10
+          ]
+        }
+      },
+      "prediction": "Based on Passage 2 and Passage 3, the models were trained on one machine with 8 NVIDIA P100 GPUs.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.29,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "with 8 NVIDIA P100 GPUs. For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 secon"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "contrast to RNN sequence-to-sequence models [ 37], the Transformer outperforms the Berkeley- Parser [29] even when training only on the WSJ training set of 40K sentences. 7 Conclusion In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, repla"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "hyperparameters were chosen after experimentation on the development set. We set the maximum output length during inference to input length + 50, but terminate early when possible [38]. Table 2 summarizes our results and compares our translation quality and training costs to other model architecture"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.6666666666666666,
+      "semantic_similarity": 0.7143725156784058,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at10",
+      "type": "multi-hop",
+      "question": "How many training steps did the big model run, and how long did each step take?",
+      "answer": "300,000 steps at 1.0 seconds per step (3.5 days).",
+      "must_contain": [
+        "300,000",
+        "1.0"
+      ],
+      "evidence": [
+        "The big models were trained for 300,000 steps"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            8,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            8,
+            8,
+            6
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            1,
+            9
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the big models were trained for 300,000 steps, and each step took 1.0 seconds.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.16,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 7,
+          "document": null,
+          "text": "with 8 NVIDIA P100 GPUs. For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 secon"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to Eng"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5,
+      "semantic_similarity": 0.6886793375015259,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at11",
+      "type": "numeric",
+      "question": "What F1 does the 4-layer Transformer reach on WSJ Section 23 in the semi-supervised setting?",
+      "answer": "92.7.",
+      "must_contain": [
+        "92.7"
+      ],
+      "evidence": [
+        "Transformer (4 layers)\nsemi-supervised\n92.7"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            9,
+            9,
+            14,
+            15
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            3,
+            10,
+            9,
+            8,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            9,
+            10,
+            9,
+            8
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1 (Table 4), the 4-layer Transformer reaches an F1 score of 92.7 in the semi-supervised setting on Section 23 of the WSJ.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 6.93,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 10,
+          "document": null,
+          "text": "Table 4: The Transformer generalizes well to English constituency parsing (Results are on Section 23 of WSJ) Parser Training WSJ 23 F1 Vinyals & Kaiser el al. (2014) [37] WSJ only, discriminative 88.3 Petrov et al. (2006) [29] WSJ only, discriminative 90.4 Zhu et al. (2013) [40] WSJ only, discrimina"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "contrast to RNN sequence-to-sequence models [ 37], the Transformer outperforms the Berkeley- Parser [29] even when training only on the WSJ training set of 40K sentences. 7 Conclusion In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, repla"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also dro"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.1904761904761905,
+      "semantic_similarity": 0.1697283685207367,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at12",
+      "type": "factual",
+      "question": "Which model still beats the Transformer on English constituency parsing?",
+      "answer": "The Recurrent Neural Network Grammar.",
+      "must_contain": [
+        "Recurrent Neural Network Grammar"
+      ],
+      "evidence": [
+        "with the exception of the\nRecurrent Neural Network Grammar"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            9,
+            1,
+            10,
+            8,
+            7
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            1,
+            9,
+            8,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            1,
+            10,
+            9,
+            8
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, the Recurrent Neural Network Grammar [8] yields better results than the Transformer on English constituency parsing.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.25,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 10,
+          "document": null,
+          "text": "Table 4: The Transformer generalizes well to English constituency parsing (Results are on Section 23 of WSJ) Parser Training WSJ 23 F1 Vinyals & Kaiser el al. (2014) [37] WSJ only, discriminative 88.3 Petrov et al. (2006) [29] WSJ only, discriminative 90.4 Zhu et al. (2013) [40] WSJ only, discrimina"
+        },
+        {
+          "page": 1,
+          "document": null,
+          "text": "task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to Eng"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "contrast to RNN sequence-to-sequence models [ 37], the Transformer outperforms the Berkeley- Parser [29] even when training only on the WSJ training set of 40K sentences. 7 Conclusion In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, repla"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also dro"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.38095238095238093,
+      "semantic_similarity": 0.7045960426330566,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at13",
+      "type": "numeric",
+      "question": "What is the complexity per layer of self-attention according to Table 1?",
+      "answer": "O(n^2 · d).",
+      "must_contain": [
+        "n"
+      ],
+      "evidence": [
+        "Maximum path lengths, per-layer complexity"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            6,
+            6,
+            15,
+            9,
+            6
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            6,
+            6,
+            3,
+            6,
+            4
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            6,
+            7,
+            5
+          ]
+        }
+      },
+      "prediction": "According to Table 1, the complexity per layer of self-attention is $O(n^2 \\cdot d)$, as shown in Passage 1.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 5.36,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 6,
+          "document": null,
+          "text": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. nis the sequence length, dis the representation dimension, kis the kernel size of convolutions and rthe size of the neighborhood in restricted self-attention. Layer Type Complex"
+        },
+        {
+          "page": 6,
+          "document": null,
+          "text": "complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence "
+        },
+        {
+          "page": 6,
+          "document": null,
+          "text": "iis the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2πto10000 ·2π. We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fix"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "length nis smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [38] and byte-pair [ 31] representations. To improve computational performance for tasks involving very "
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "encoder-decoder attention mechanisms in sequence-to-sequence models such as [38, 2, 9]. •The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in"
+        },
+        {
+          "page": 3,
+          "document": null,
+          "text": "Figure 1: The Transformer - model architecture. The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively. 3.1 Encoder and Decoder Stacks Encoder"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.38095238095238093,
+      "semantic_similarity": 0.38404643535614014,
+      "context_hit": 1.0
+    },
+    {
+      "id": "at14",
+      "type": "numeric",
+      "question": "How large is the English-German training dataset?",
+      "answer": "About 4.5 million sentence pairs.",
+      "must_contain": [
+        "4.5 million"
+      ],
+      "evidence": [
+        "consisting of about 4.5 million"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            10,
+            8,
+            8,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            9,
+            8,
+            7,
+            8,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            8,
+            8
+          ]
+        }
+      },
+      "prediction": "Based on Passage 1, the standard WMT 2014 English-German dataset consists of about 4.5 million sentence pairs.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.63,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 7,
+          "document": null,
+          "text": "a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side benefit, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix. Not only do individual attention "
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "hyperparameters were chosen after experimentation on the development set. We set the maximum output length during inference to input length + 50, but terminate early when possible [38]. Table 2 summarizes our results and compares our translation quality and training costs to other model architecture"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5454545454545454,
+      "semantic_similarity": 0.7547395825386047,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at15",
+      "type": "multi-hop",
+      "question": "What beam size and length penalty were used for translation, and how did they differ for parsing?",
+      "answer": "Translation used beam size 4 with alpha = 0.6; parsing used beam size 21 with alpha = 0.3.",
+      "must_contain": [
+        "4",
+        "21"
+      ],
+      "evidence": [
+        "We\nused beam search with a beam size of 4",
+        "We used a beam size of 21"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            8,
+            8,
+            7,
+            9,
+            10
+          ]
+        },
+        "semantic": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            8,
+            9,
+            9,
+            12,
+            10
+          ]
+        },
+        "hybrid": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            8,
+            10,
+            8,
+            9,
+            7
+          ]
+        }
+      },
+      "prediction": "For translation, a beam size of 4 and a length penalty of $\\alpha = 0.6$ were used, as stated in Passage 1. \n\nFor parsing, a beam size of 21 and a length penalty of $\\alpha = 0.3$ were used for both the WSJ only and the semi-supervised settings, as noted in Passage 2.",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.06,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 8,
+          "document": null,
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 10,
+          "document": null,
+          "text": "Table 4: The Transformer generalizes well to English constituency parsing (Results are on Section 23 of WSJ) Parser Training WSJ 23 F1 Vinyals & Kaiser el al. (2014) [37] WSJ only, discriminative 88.3 Petrov et al. (2006) [29] WSJ only, discriminative 90.4 Zhu et al. (2013) [40] WSJ only, discrimina"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "hyperparameters were chosen after experimentation on the development set. We set the maximum output length during inference to input length + 50, but terminate early when possible [38]. Table 2 summarizes our results and compares our translation quality and training costs to other model architecture"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        },
+        {
+          "page": 7,
+          "document": null,
+          "text": "length nis smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [38] and byte-pair [ 31] representations. To improve computational performance for tasks involving very "
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "input. Furthermore, RNN sequence-to-sequence models have not been able to attain state-of-the-art results in small-data regimes [37]. We trained a 4-layer transformer with dmodel = 1024 on the Wall Street Journal (WSJ) portion of the Penn Treebank [ 25], about 40K training sentences. We also trained"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.6153846153846153,
+      "semantic_similarity": 0.7288318872451782,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at16",
+      "type": "factual",
+      "question": "Why did the authors choose sinusoidal positional encodings over learned ones?",
+      "answer": "Because it may let the model extrapolate to sequence lengths longer than those seen during training; learned embeddings gave nearly identical results.",
+      "must_contain": [
+        "extrapolate"
+      ],
+      "evidence": [
+        "because it may allow the model to extrapolate"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            9,
+            4,
+            8
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            9,
+            2,
+            15,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            9,
+            6,
+            9,
+            2
+          ]
+        }
+      },
+      "prediction": "As shown in Passage 1, the authors chose the sinusoidal version because they hypothesized it would allow the model to extrapolate to sequence lengths longer than the ones encountered during training (as well as allowing the model to easily learn to attend by relative positions).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 4.62,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 6,
+          "document": null,
+          "text": "iis the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2πto10000 ·2π. We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any fix"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also dro"
+        },
+        {
+          "page": 6,
+          "document": null,
+          "text": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. nis the sequence length, dis the representation dimension, kis the kernel size of convolutions and rthe size of the neighborhood in restricted self-attention. Layer Type Complex"
+        },
+        {
+          "page": 9,
+          "document": null,
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        },
+        {
+          "page": 8,
+          "document": null,
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 5,
+          "document": null,
+          "text": "output values. These are concatenated and once again projected, resulting in the final values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhib"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.36363636363636365,
+      "semantic_similarity": 0.6055988073348999,
+      "context_hit": 0.0
+    },
+    {
+      "id": "at17",
+      "type": "out-of-document",
+      "question": "What BLEU score does GPT-4 get on WMT 2014?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 48.38,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "at18",
+      "type": "out-of-document",
+      "question": "How many parameters does BERT-large have?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {},
+      "prediction": "I couldn't find sufficient information in the uploaded document to answer this question.",
+      "grounded": false,
+      "refused": true,
+      "confidence": null,
+      "latency_s": 4.11,
+      "error": null,
+      "evidence_returned": [],
+      "refusal_correct": 1.0
+    },
+    {
+      "id": "x01",
+      "type": "cross-document",
+      "question": "How did the minimum attendance requirement change between the 2025 and 2026 regulations?",
+      "answer": "It rose from 75% in 2025 to 80% in 2026.",
+      "must_contain": [
+        "75",
+        "80"
+      ],
+      "evidence": [
+        "minimum attendance of 75%",
+        "minimum attendance of 80%"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on the provided documents, the minimum attendance requirement changed from 75% in the 2025 regulations (as shown in Passage 2) to 80% in the 2026 regulations, following a review by the Academic Senate (as shown in Passage 1).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 5.41,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.2941176470588235,
+      "semantic_similarity": 0.34466880559921265,
+      "context_hit": 1.0
+    },
+    {
+      "id": "x02",
+      "type": "cross-document",
+      "question": "How did the grade appeal deadline change between the two regulation documents?",
+      "answer": "It was extended from 10 working days (2025) to 15 working days (2026).",
+      "must_contain": [
+        "10",
+        "15"
+      ],
+      "evidence": [
+        "within 10 working days",
+        "within 15 working days"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on the provided documents, the deadline to submit a written appeal to contest a grade changed from within 10 working days of the result being published in the 2025 regulations (as shown in Passage 2) to within 15 working days in the 2026 regulations (as shown in Passage 1 and Passage 3).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 2.6,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.38297872340425526,
+      "semantic_similarity": 0.411228746175766,
+      "context_hit": 1.0
+    },
+    {
+      "id": "x03",
+      "type": "cross-document",
+      "question": "What do the 2025 and 2026 regulations have in common about the pass mark?",
+      "answer": "Both require a minimum aggregate score of 40% to pass a course.",
+      "must_contain": [
+        "40%"
+      ],
+      "evidence": [
+        "minimum aggregate score of 40%"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on the provided passages, both the 2025 and 2026 regulations require a minimum aggregate score of 40% to pass a course (as shown in Passage 1 and Passage 2).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 1.83,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "University Academic Regulations 2026 Attendance Requirements Students are required to maintain a minimum attendance of 80% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "University Academic Regulations 2025 Attendance Requirements Students are required to maintain a minimum attendance of 75% in each registered course during a semester. Students falling below this threshold will be marked ineligible to sit for the end-semester examination in that course, unless a med"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2025.txt",
+          "text": "10 working days of the result being published. Appeals submitted after this window will not be considered. Leave of Absence Students requiring an extended leave of absence exceeding two weeks must submit a formal request to the Registrar, accompanied by supporting documentation. Approved leaves do n"
+        },
+        {
+          "page": 1,
+          "document": "university_regulations_2026.txt",
+          "text": "contest a grade must submit a written appeal to the Examination Cell within 15 working days of the result being published. Appeals submitted after this window will not be considered. Appeals can now be submitted through the online student portal in addition to physical submission. Leave of Absence S"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.5714285714285715,
+      "semantic_similarity": 0.7534908056259155,
+      "context_hit": 0.0
+    },
+    {
+      "id": "x04",
+      "type": "cross-document",
+      "question": "Which paper reports BLEU scores and which reports Precision@5?",
+      "answer": "The Transformer paper (Attention Is All You Need) reports BLEU; the hybrid retrieval paper reports Precision@5.",
+      "must_contain": [
+        "BLEU",
+        "Precision@5"
+      ],
+      "evidence": [
+        "Precision@5 of 0.83",
+        "establishing a new state-of-the-art BLEU score of 28.4"
+      ],
+      "documents": [
+        "hybrid_paper",
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {},
+      "prediction": "Based on the provided documents:\n- The paper \"Attention Is All You Need\" reports BLEU scores (as shown in Passages 2, 3, 4, and 6).\n- The research paper on hybrid retrieval reports Precision@5 (as shown in Passage 1).",
+      "grounded": true,
+      "refused": false,
+      "confidence": null,
+      "latency_s": 55.03,
+      "error": null,
+      "evidence_returned": [
+        {
+          "page": 2,
+          "document": "research_paper_hybrid_retrieval.txt",
+          "text": "n sufficient information. Dataset We constructed an evaluation dataset of 120 question-answer pairs manually verified against five source documents: two academic papers, two university regulation documents, and one technical manual. Each question was labeled with the specific page containing the sup"
+        },
+        {
+          "page": 8,
+          "document": "attention_is_all_you_need.pdf",
+          "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost. ModelBLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [18] 23.75 Deep-Att + PosUnk [39] 39.2 1.0·"
+        },
+        {
+          "page": 8,
+          "document": "attention_is_all_you_need.pdf",
+          "text": "Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The configuration of t"
+        },
+        {
+          "page": 1,
+          "document": "attention_is_all_you_need.pdf",
+          "text": "Provided proper attribution is provided, Google hereby grants permission to reproduce the tables and figures in this paper solely for use in journalistic or scholarly works. Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.comNoam Shazeer∗ Google Brain noam@google.comNiki Parma"
+        },
+        {
+          "page": 1,
+          "document": "attention_is_all_you_need.pdf",
+          "text": "task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to Eng"
+        },
+        {
+          "page": 9,
+          "document": "attention_is_all_you_need.pdf",
+          "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to"
+        }
+      ],
+      "answer_correct": 1.0,
+      "f1": 0.6046511627906977,
+      "semantic_similarity": 0.6646869778633118,
+      "context_hit": 1.0
+    }
+  ]
+}

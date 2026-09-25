@@ -45,3 +45,5 @@ dist/
 .DS_Store
 Thumbs.db
 
+
+# Evaluation run outputs are kept (baseline history)
