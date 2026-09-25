@@ -119,6 +119,8 @@ def select_evidence(answer: str, evidence: list, show_document: bool) -> list:
     out = []
     for number, item in chosen:
         ev = evidence_item(item["chunk"], item["score"], show_document)
+        if "rerank_score" in item:
+            ev["rerank_logit"] = round(item["rerank_score"], 3)
         ev["citation"] = number
         ev["cited"] = number in cited
         out.append(ev)

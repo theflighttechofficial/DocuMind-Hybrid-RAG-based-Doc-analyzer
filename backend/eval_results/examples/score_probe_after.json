@@ -1,0 +1,70 @@
+{
+  "question": "what company is this?",
+  "chunks_in_document": 8,
+  "reranked_candidates": [
+    {
+      "rank": 1,
+      "page": 1,
+      "words": 109,
+      "raw_logit": -5.912,
+      "sigmoid_of_logit": 0.0027,
+      "displayed_relevance": 1.0,
+      "text": "Halcyon Aerospace Ltd.\n\nThis report reviews the progress of Project KESTREL, Halcyon Aeros"
+    },
+    {
+      "rank": 2,
+      "page": 2,
+      "words": 119,
+      "raw_logit": -7.659,
+      "sigmoid_of_logit": 0.0005,
+      "displayed_relevance": 0.5983,
+      "text": "Project KESTREL was founded in 2021 to address delays in delivering vaccines, blood units "
+    },
+    {
+      "rank": 3,
+      "page": 7,
+      "words": 32,
+      "raw_logit": -8.003,
+      "sigmoid_of_logit": 0.0003,
+      "displayed_relevance": 0.5194,
+      "text": "Project KESTREL met its 2025 reliability goals, resolved its most serious safety incident,"
+    },
+    {
+      "rank": 4,
+      "page": 7,
+      "words": 74,
+      "raw_logit": -8.465,
+      "sigmoid_of_logit": 0.0002,
+      "displayed_relevance": 0.4131,
+      "text": "Of the approved Rs. 48 crore budget, Rs. 41.5 crore had been spent by the end of 2025, pri"
+    },
+    {
+      "rank": 5,
+      "page": 5,
+      "words": 94,
+      "raw_logit": -9.489,
+      "sigmoid_of_logit": 0.0001,
+      "displayed_relevance": 0.1775,
+      "text": "On 14 March 2025, the prototype KESTREL-6B lost altitude control shortly after take-off an"
+    },
+    {
+      "rank": 6,
+      "page": 3,
+      "words": 103,
+      "raw_logit": -9.882,
+      "sigmoid_of_logit": 0.0001,
+      "displayed_relevance": 0.0873,
+      "text": "The table below lists the certified specifications of the KESTREL-7 as of December 2025.\n\n"
+    }
+  ],
+  "answer": "Halcyon Aerospace Ltd. [1].",
+  "evidence": [
+    {
+      "citation": 1,
+      "page": 1,
+      "rerank_logit": -5.912,
+      "relevance": 1.0,
+      "text": "Halcyon Aerospace Ltd.\n\nThis report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the program is Rs. 48 crore. Key risks identified this year relate to weather tolerance and cold-temperature battery performance, both discussed later in this review."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "question": "what company is this?",
+  "chunks_in_document": 11,
+  "reranked_candidates": [
+    {
+      "rank": 1,
+      "page": 1,
+      "words": 3,
+      "raw_logit": -3.819,
+      "displayed_relevance": 0.0215,
+      "text": "Halcyon Aerospace Ltd."
+    },
+    {
+      "rank": 2,
+      "page": 1,
+      "words": 106,
+      "raw_logit": -6.858,
+      "displayed_relevance": 0.001,
+      "text": "This report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medica"
+    },
+    {
+      "rank": 3,
+      "page": 2,
+      "words": 119,
+      "raw_logit": -7.659,
+      "displayed_relevance": 0.0005,
+      "text": "Project KESTREL was founded in 2021 to address delays in delivering vaccines, blood units "
+    },
+    {
+      "rank": 4,
+      "page": 7,
+      "words": 32,
+      "raw_logit": -8.003,
+      "displayed_relevance": 0.0003,
+      "text": "Project KESTREL met its 2025 reliability goals, resolved its most serious safety incident,"
+    },
+    {
+      "rank": 5,
+      "page": 7,
+      "words": 74,
+      "raw_logit": -8.465,
+      "displayed_relevance": 0.0002,
+      "text": "Of the approved Rs. 48 crore budget, Rs. 41.5 crore had been spent by the end of 2025, pri"
+    },
+    {
+      "rank": 6,
+      "page": 3,
+      "words": 14,
+      "raw_logit": -9.266,
+      "displayed_relevance": 0.0001,
+      "text": "The table below lists the certified specifications of the KESTREL-7 as of December 2025."
+    }
+  ],
+  "answer": "The company is Halcyon Aerospace Ltd. [1].",
+  "evidence": [
+    {
+      "citation": 1,
+      "page": 1,
+      "relevance": 0.0215,
+      "text": "Halcyon Aerospace Ltd."
+    }
+  ]
+}

@@ -54,6 +54,7 @@ class EvidenceOut(BaseModel):
     spans: list[dict] = []  # [{page, bbox, char_start, char_end}] for highlighting
     citation: int | None = None  # the [n] this passage is cited as in the answer
     cited: bool = False  # False when shown via the relevance-threshold fallback
+    rerank_logit: float | None = None  # raw cross-encoder score behind "relevance"
 
 
 class AskResponse(BaseModel):

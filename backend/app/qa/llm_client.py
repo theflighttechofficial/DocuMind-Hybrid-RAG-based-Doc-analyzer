@@ -9,6 +9,10 @@ logger = logging.getLogger(__name__)
 
 _client_configured = False
 
+# Without a deadline a stalled Gemini call once held a request open for over
+# 10 minutes before failing with "504 Deadline Exceeded".
+LLM_TIMEOUT_S = 60
+
 
 def _ensure_configured():
     global _client_configured
@@ -40,6 +44,7 @@ def generate(prompt: str, system_instruction: str | None = None, temperature: fl
         response = model.generate_content(
             prompt,
             generation_config=genai.types.GenerationConfig(temperature=temperature),
+            request_options={"timeout": LLM_TIMEOUT_S},
         )
         return (response.text or "").strip()
     except Exception as exc:
@@ -64,6 +69,7 @@ def generate_stream(prompt: str, system_instruction: str | None = None, temperat
             prompt,
             generation_config=genai.types.GenerationConfig(temperature=temperature),
             stream=True,
+            request_options={"timeout": LLM_TIMEOUT_S},
         )
         for chunk in response:
             if chunk.text:

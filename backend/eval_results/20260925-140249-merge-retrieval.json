@@ -1,0 +1,3084 @@
+{
+  "label": "merge-retrieval",
+  "timestamp": "2026-09-25T14:02:49",
+  "base_url": "http://127.0.0.1:8000",
+  "backend_config": {
+    "settings": {
+      "gemini_model": "gemini-3.5-flash-lite",
+      "upload_dir": "./storage/uploads",
+      "vector_dir": "./storage/vector_index",
+      "ocr_engine": "auto",
+      "ocr_min_chars": 20,
+      "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "embedding_fallback_model": "sentence-transformers/all-MiniLM-L6-v2",
+      "chunk_size_words": 220,
+      "chunk_overlap_words": 40,
+      "top_k_retrieval": 6,
+      "evidence_min_relevance": 0.71
+    },
+    "ocr_engine": "easyocr",
+    "loaded_models": {}
+  },
+  "documents": {
+    "ids": {
+      "hybrid_paper": "4506a749-b5fb-429d-923a-8f7f109d6982",
+      "regs_2025": "c68af642-5378-4289-ade7-219e4bc262ed",
+      "regs_2026": "f48e8341-9355-41ff-9435-438106323471",
+      "attention_paper": "af3687c4-0211-48a4-ae3f-10e9a73509ec"
+    },
+    "processing_seconds": {
+      "hybrid_paper": 16.8,
+      "regs_2025": 1.0,
+      "regs_2026": 1.1,
+      "attention_paper": 11.0
+    }
+  },
+  "summary": {
+    "retrieval": {
+      "bm25": {
+        "hit": 1.0,
+        "recall": 1.0,
+        "precision": 0.2103,
+        "mrr": 0.8883,
+        "n": 47
+      },
+      "semantic": {
+        "hit": 0.9787,
+        "recall": 0.9787,
+        "precision": 0.2,
+        "mrr": 0.8209,
+        "n": 47
+      },
+      "hybrid": {
+        "hit": 1.0,
+        "recall": 1.0,
+        "precision": 0.2043,
+        "mrr": 0.9291,
+        "n": 47
+      }
+    },
+    "qa": {
+      "answer_accuracy": null,
+      "token_f1": null,
+      "semantic_similarity": null,
+      "context_hit": null,
+      "false_refusal_rate": null,
+      "refusal_accuracy": null,
+      "accuracy_by_type": {},
+      "mean_latency_s": null,
+      "n_answerable": 0,
+      "n_unanswerable": 0,
+      "n_errors": 0
+    }
+  },
+  "questions": [
+    {
+      "id": "hp01",
+      "type": "factual",
+      "question": "What methodology does the paper use?",
+      "answer": "A hybrid retrieval approach combining BM25 lexical search with dense semantic embeddings, feeding top-ranked chunks to an LLM for grounded answer generation.",
+      "must_contain": [
+        "BM25"
+      ],
+      "evidence": [
+        "both indices are queried independently"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 0.0,
+          "recall": 0.0,
+          "precision": 0.0,
+          "mrr": 0.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            1,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp02",
+      "type": "numeric",
+      "question": "What weighting is used to combine semantic and lexical scores?",
+      "answer": "0.6 for semantic similarity and 0.4 for lexical relevance.",
+      "must_contain": [
+        "0.6",
+        "0.4"
+      ],
+      "evidence": [
+        "weights of 0.6 for semantic similarity"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            2,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            2,
+            1,
+            2,
+            2,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp03",
+      "type": "numeric",
+      "question": "How large was the evaluation dataset?",
+      "answer": "120 question-answer pairs across five source documents.",
+      "must_contain": [
+        "120"
+      ],
+      "evidence": [
+        "evaluation dataset of 120 question-answer pairs"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            2,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp04",
+      "type": "follow-up",
+      "question": "How many source documents was it drawn from?",
+      "answer": "Five source documents: two academic papers, two university regulation documents, and one technical manual.",
+      "must_contain": [
+        "five"
+      ],
+      "evidence": [
+        "manually\nverified against five source documents"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": "hp03",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "hp05",
+      "type": "numeric",
+      "question": "What Precision@5 did hybrid retrieval achieve?",
+      "answer": "0.83",
+      "must_contain": [
+        "0.83"
+      ],
+      "evidence": [
+        "Precision@5 of 0.83"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp06",
+      "type": "follow-up",
+      "question": "And how did the BM25-only baseline do on that metric?",
+      "answer": "The BM25-only baseline reached a Precision@5 of 0.68.",
+      "must_contain": [
+        "0.68"
+      ],
+      "evidence": [
+        "BM25-only baseline (Precision@5 of 0.68)"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": "hp05",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "hp07",
+      "type": "factual",
+      "question": "What is the main limitation of the approach?",
+      "answer": "It relies on well-structured source documents; scanned or image-only PDFs need a separate OCR pipeline, and it struggles with questions that need synthesis across many distant sections.",
+      "must_contain": [
+        "OCR"
+      ],
+      "evidence": [
+        "reliance on well-structured"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            2,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            1,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp08",
+      "type": "numeric",
+      "question": "How many words are in each chunk?",
+      "answer": "Approximately 220 words.",
+      "must_contain": [
+        "220"
+      ],
+      "evidence": [
+        "overlapping chunks of\napproximately 220 words"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            1,
+            2,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp09",
+      "type": "numeric",
+      "question": "What is the dimensionality of the embedding vectors?",
+      "answer": "384-dimensional vectors.",
+      "must_contain": [
+        "384"
+      ],
+      "evidence": [
+        "384-dimensional vectors"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            1,
+            1,
+            2,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            1,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp10",
+      "type": "factual",
+      "question": "What kind of index is used for nearest-neighbor search?",
+      "answer": "A FAISS flat index for exact nearest-neighbor search.",
+      "must_contain": [
+        "FAISS"
+      ],
+      "evidence": [
+        "FAISS flat index for exact nearest-neighbor search"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            2,
+            2,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            2,
+            2,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp11",
+      "type": "numeric",
+      "question": "What token-level F1 did answers from hybrid-retrieved context achieve?",
+      "answer": "0.74, compared with 0.68 for semantic-only retrieval.",
+      "must_contain": [
+        "0.74"
+      ],
+      "evidence": [
+        "token-level F1 score of 0.74"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp12",
+      "type": "multi-hop",
+      "question": "Which retrieval method had the lowest Mean Reciprocal Rank, and how far below hybrid retrieval was it?",
+      "answer": "BM25-only retrieval, with an MRR of 0.71 versus 0.89 for hybrid retrieval, a gap of 0.18.",
+      "must_contain": [
+        "0.71",
+        "0.89"
+      ],
+      "evidence": [
+        "hybrid retrieval scoring 0.89 compared to 0.81"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            2,
+            2,
+            1,
+            2,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp13",
+      "type": "factual",
+      "question": "How were the 0.6 and 0.4 weights chosen?",
+      "answer": "By manual tuning on a held-out validation subset rather than a formal hyperparameter search.",
+      "must_contain": [
+        "manual"
+      ],
+      "evidence": [
+        "was chosen based on manual tuning on a held-out validation subset"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            2,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            2,
+            2,
+            2,
+            2,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            2,
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp14",
+      "type": "factual",
+      "question": "What future work do the authors suggest?",
+      "answer": "Learned combination weights, reranking models, and evaluation on a broader range of document domains including legal and medical text.",
+      "must_contain": [
+        "reranking"
+      ],
+      "evidence": [
+        "Future work should explore learned combination weights"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            1,
+            2,
+            1,
+            2,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp15",
+      "type": "numeric",
+      "question": "What exact match score did hybrid retrieval get?",
+      "answer": "0.31.",
+      "must_contain": [
+        "0.31"
+      ],
+      "evidence": [
+        "at 0.31 for hybrid retrieval"
+      ],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            1,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            2,
+            2,
+            1,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            2,
+            1,
+            1,
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "hp16",
+      "type": "out-of-document",
+      "question": "Who is the current president of the United States?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "hp17",
+      "type": "out-of-document",
+      "question": "Which GPU was used to train the embedding model?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "hybrid_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "r501",
+      "type": "numeric",
+      "question": "What is the minimum attendance requirement?",
+      "answer": "75% in each registered course during a semester.",
+      "must_contain": [
+        "75"
+      ],
+      "evidence": [
+        "minimum attendance of 75%"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r502",
+      "type": "follow-up",
+      "question": "What happens to students who fall below it?",
+      "answer": "They are marked ineligible to sit for the end-semester examination in that course unless a medical exemption was approved by the Dean of Academic Affairs at least two weeks before the exams.",
+      "must_contain": [
+        "ineligible"
+      ],
+      "evidence": [
+        "will be marked ineligible to sit for the end-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": "r501",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "r503",
+      "type": "numeric",
+      "question": "How are final grades weighted?",
+      "answer": "30% continuous assessment, 20% mid-semester examination, and 50% end-semester examination.",
+      "must_contain": [
+        "30%",
+        "20%",
+        "50%"
+      ],
+      "evidence": [
+        "30% continuous\nassessment, 20% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.3333333333333333,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r504",
+      "type": "numeric",
+      "question": "What aggregate score is needed to pass a course?",
+      "answer": "A minimum aggregate score of 40%.",
+      "must_contain": [
+        "40%"
+      ],
+      "evidence": [
+        "minimum aggregate score of 40%"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r505",
+      "type": "numeric",
+      "question": "How long do students have to appeal a grade?",
+      "answer": "10 working days from the result being published.",
+      "must_contain": [
+        "10"
+      ],
+      "evidence": [
+        "within 10 working days"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r506",
+      "type": "factual",
+      "question": "Who approves medical exemptions from the attendance rule?",
+      "answer": "The Dean of Academic Affairs.",
+      "must_contain": [
+        "Dean of Academic Affairs"
+      ],
+      "evidence": [
+        "approved by the Dean of Academic\nAffairs"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r507",
+      "type": "multi-hop",
+      "question": "What two conditions must a student meet to be eligible for the final examination?",
+      "answer": "Satisfy the minimum attendance requirement and clear all outstanding fee payments by the date in the academic calendar.",
+      "must_contain": [
+        "attendance",
+        "fee"
+      ],
+      "evidence": [
+        "cleared all outstanding fee\npayments"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r508",
+      "type": "multi-hop",
+      "question": "Together, how much of the final grade comes from components other than the end-semester examination?",
+      "answer": "50%: 30% continuous assessment plus 20% mid-semester examination.",
+      "must_contain": [
+        "50%"
+      ],
+      "evidence": [
+        "30% continuous\nassessment, 20% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r509",
+      "type": "factual",
+      "question": "Do approved leaves count against the attendance requirement?",
+      "answer": "No, approved leaves do not count against the minimum attendance requirement.",
+      "must_contain": [
+        "not"
+      ],
+      "evidence": [
+        "Approved leaves do not count against the minimum attendance"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r510",
+      "type": "factual",
+      "question": "Where must a leave of absence longer than two weeks be requested?",
+      "answer": "A formal request to the Registrar, with supporting documentation.",
+      "must_contain": [
+        "Registrar"
+      ],
+      "evidence": [
+        "submit a formal request to the Registrar"
+      ],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r511",
+      "type": "out-of-document",
+      "question": "What is the tuition fee per semester?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "regs_2025"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "r601",
+      "type": "numeric",
+      "question": "What is the minimum attendance requirement?",
+      "answer": "80% in each registered course during a semester.",
+      "must_contain": [
+        "80"
+      ],
+      "evidence": [
+        "minimum attendance of 80%"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r602",
+      "type": "follow-up",
+      "question": "Why was it changed?",
+      "answer": "It was raised from 75% following a review by the Academic Senate.",
+      "must_contain": [
+        "Academic Senate"
+      ],
+      "evidence": [
+        "following a review by the Academic Senate"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": "r601",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "r603",
+      "type": "factual",
+      "question": "How can grade appeals be submitted?",
+      "answer": "In writing to the Examination Cell within 15 working days, either physically or through the online student portal.",
+      "must_contain": [
+        "portal"
+      ],
+      "evidence": [
+        "online student portal"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.25,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r604",
+      "type": "factual",
+      "question": "What penalties can academic integrity violations lead to?",
+      "answer": "Penalties ranging from a grade reduction to expulsion, after referral to the Academic Integrity Committee.",
+      "must_contain": [
+        "expulsion"
+      ],
+      "evidence": [
+        "ranging from a grade reduction to expulsion"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r605",
+      "type": "numeric",
+      "question": "What weight does the mid-semester examination carry?",
+      "answer": "25%.",
+      "must_contain": [
+        "25%"
+      ],
+      "evidence": [
+        "25% mid-semester examination"
+      ],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "r606",
+      "type": "out-of-document",
+      "question": "When does the 2026 academic calendar begin?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "at01",
+      "type": "numeric",
+      "question": "What BLEU score does the Transformer achieve on WMT 2014 English-to-German?",
+      "answer": "28.4 BLEU.",
+      "must_contain": [
+        "28.4"
+      ],
+      "evidence": [
+        "establishing a new state-of-the-art BLEU score of 28.4"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            1,
+            10,
+            7,
+            7
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            9,
+            7,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            1,
+            7,
+            10,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "id": "at02",
+      "type": "follow-up",
+      "question": "How long did that model take to train?",
+      "answer": "3.5 days on 8 P100 GPUs.",
+      "must_contain": [
+        "3.5 days"
+      ],
+      "evidence": [
+        "Training took 3.5 days on 8 P100 GPUs"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": "at01",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "at03",
+      "type": "numeric",
+      "question": "How many identical layers are in the encoder stack?",
+      "answer": "N = 6 identical layers.",
+      "must_contain": [
+        "6"
+      ],
+      "evidence": [
+        "The encoder is composed of a stack of N = 6 identical layers"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            3,
+            3,
+            13,
+            7,
+            6
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            3,
+            3,
+            5,
+            5,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            3,
+            3,
+            5,
+            5,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "at04",
+      "type": "follow-up",
+      "question": "What about the decoder, and what extra sub-layer does it add?",
+      "answer": "The decoder also has N = 6 identical layers and adds a third sub-layer that performs multi-head attention over the encoder stack's output.",
+      "must_contain": [
+        "6",
+        "encoder"
+      ],
+      "evidence": [
+        "the decoder inserts a third sub-layer"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": "at03",
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "at05",
+      "type": "numeric",
+      "question": "How many attention heads does the base model use, and what is the dimension of each head?",
+      "answer": "h = 8 heads, each with dk = dv = 64.",
+      "must_contain": [
+        "8",
+        "64"
+      ],
+      "evidence": [
+        "In this work we employ h = 8 parallel attention layers"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            9,
+            13,
+            6,
+            3
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            3,
+            4,
+            13,
+            3
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            9,
+            3,
+            5,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "id": "at06",
+      "type": "numeric",
+      "question": "What is the inner-layer dimensionality of the position-wise feed-forward network?",
+      "answer": "dff = 2048.",
+      "must_contain": [
+        "2048"
+      ],
+      "evidence": [
+        "the inner-layer has dimensionality"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            3,
+            7,
+            4,
+            6
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            3,
+            5,
+            7,
+            6,
+            6
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            5,
+            3,
+            7,
+            4,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "id": "at07",
+      "type": "numeric",
+      "question": "What warmup_steps value was used for the learning rate schedule?",
+      "answer": "warmup_steps = 4000.",
+      "must_contain": [
+        "4000"
+      ],
+      "evidence": [
+        "warmup_steps = 4000"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            9,
+            3
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            7,
+            8,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            9,
+            8,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "id": "at08",
+      "type": "numeric",
+      "question": "What label smoothing value was used during training?",
+      "answer": "0.1.",
+      "must_contain": [
+        "0.1"
+      ],
+      "evidence": [
+        "we employed label smoothing of value"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            7,
+            9,
+            3
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            7,
+            7,
+            6,
+            7
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            7,
+            7,
+            8,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "id": "at09",
+      "type": "factual",
+      "question": "What hardware were the models trained on?",
+      "answer": "One machine with 8 NVIDIA P100 GPUs.",
+      "must_contain": [
+        "P100"
+      ],
+      "evidence": [
+        "We trained our models on one machine with 8 NVIDIA P100 GPUs"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            9,
+            8
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            9,
+            8,
+            7,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            10,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "id": "at10",
+      "type": "multi-hop",
+      "question": "How many training steps did the big model run, and how long did each step take?",
+      "answer": "300,000 steps at 1.0 seconds per step (3.5 days).",
+      "must_contain": [
+        "300,000",
+        "1.0"
+      ],
+      "evidence": [
+        "The big models were trained for 300,000 steps"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            8,
+            2
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            7,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            8,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "id": "at11",
+      "type": "numeric",
+      "question": "What F1 does the 4-layer Transformer reach on WSJ Section 23 in the semi-supervised setting?",
+      "answer": "92.7.",
+      "must_contain": [
+        "92.7"
+      ],
+      "evidence": [
+        "Transformer (4 layers)\nsemi-supervised\n92.7"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            9,
+            10,
+            9,
+            7
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            8,
+            10,
+            8,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            9,
+            10,
+            10,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "at12",
+      "type": "factual",
+      "question": "Which model still beats the Transformer on English constituency parsing?",
+      "answer": "The Recurrent Neural Network Grammar.",
+      "must_contain": [
+        "Recurrent Neural Network Grammar"
+      ],
+      "evidence": [
+        "with the exception of the\nRecurrent Neural Network Grammar"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            9,
+            9,
+            10,
+            10,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            10,
+            9,
+            10,
+            9,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            9,
+            10,
+            9,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "at13",
+      "type": "numeric",
+      "question": "What is the complexity per layer of self-attention according to Table 1?",
+      "answer": "O(n^2 · d).",
+      "must_contain": [
+        "n"
+      ],
+      "evidence": [
+        "Maximum path lengths, per-layer complexity"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            6,
+            7,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            6,
+            6,
+            7,
+            6,
+            3
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            7,
+            6,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "id": "at14",
+      "type": "numeric",
+      "question": "How large is the English-German training dataset?",
+      "answer": "About 4.5 million sentence pairs.",
+      "must_contain": [
+        "4.5 million"
+      ],
+      "evidence": [
+        "consisting of about 4.5 million"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            1,
+            8,
+            10,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            7,
+            10
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            9,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "at15",
+      "type": "multi-hop",
+      "question": "What beam size and length penalty were used for translation, and how did they differ for parsing?",
+      "answer": "Translation used beam size 4 with alpha = 0.6; parsing used beam size 21 with alpha = 0.3.",
+      "must_contain": [
+        "4",
+        "21"
+      ],
+      "evidence": [
+        "We\nused beam search with a beam size of 4",
+        "We used a beam size of 21"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            10,
+            9,
+            7,
+            6
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 0.5,
+          "pages": [
+            9,
+            8,
+            10,
+            9,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.4,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            10,
+            9,
+            7,
+            12
+          ]
+        }
+      }
+    },
+    {
+      "id": "at16",
+      "type": "factual",
+      "question": "Why did the authors choose sinusoidal positional encodings over learned ones?",
+      "answer": "Because it may let the model extrapolate to sequence lengths longer than those seen during training; learned embeddings gave nearly identical results.",
+      "must_contain": [
+        "extrapolate"
+      ],
+      "evidence": [
+        "because it may allow the model to extrapolate"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            9,
+            8,
+            4
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            9,
+            6,
+            2
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            6,
+            6,
+            9,
+            8,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "id": "at17",
+      "type": "out-of-document",
+      "question": "What BLEU score does GPT-4 get on WMT 2014?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "at18",
+      "type": "out-of-document",
+      "question": "How many parameters does BERT-large have?",
+      "answer": null,
+      "must_contain": [],
+      "evidence": [],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": false,
+      "retrieval": {}
+    },
+    {
+      "id": "at19",
+      "type": "table",
+      "question": "According to Table 2, what EN-FR BLEU score does the Transformer base model get?",
+      "answer": "38.1.",
+      "must_contain": [
+        "38.1"
+      ],
+      "evidence": [
+        "Transformer (base model) 27.3 38.1"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            8,
+            1,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            8,
+            9,
+            8,
+            7,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            8,
+            7,
+            9,
+            8,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "id": "at20",
+      "type": "table",
+      "question": "In Table 3, what dev-set BLEU does the big model reach and how many parameters does it have?",
+      "answer": "26.4 BLEU with 213 million parameters.",
+      "must_contain": [
+        "26.4",
+        "213"
+      ],
+      "evidence": [
+        "300K 4.33 26.4 213"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.3333333333333333,
+          "pages": [
+            9,
+            8,
+            9,
+            7,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            9,
+            8,
+            9,
+            7,
+            3
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            8,
+            9,
+            9,
+            7,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "at21",
+      "type": "table",
+      "question": "What EN-DE BLEU score does ByteNet get in Table 2?",
+      "answer": "23.75.",
+      "must_contain": [
+        "23.75"
+      ],
+      "evidence": [
+        "ByteNet [18] 23.75"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            8,
+            9,
+            1
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            9,
+            1
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            1,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "at22",
+      "type": "table",
+      "question": "Which parser in Table 4 has the highest WSJ 23 F1, and what is that score?",
+      "answer": "Dyer et al. (2016), generative, with 93.3.",
+      "must_contain": [
+        "Dyer",
+        "93.3"
+      ],
+      "evidence": [
+        "generative 93.3"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            10,
+            8,
+            5,
+            9
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            10,
+            9,
+            9,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            10,
+            10,
+            9,
+            8,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "id": "at23",
+      "type": "numeric",
+      "question": "What dropout rate did the big English-to-French model use?",
+      "answer": "Pdrop = 0.1 instead of 0.3.",
+      "must_contain": [
+        "0.1"
+      ],
+      "evidence": [
+        "used dropout rate Pdrop = 0.1, instead of 0.3"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            8,
+            9,
+            7,
+            7
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            9,
+            8,
+            8,
+            7,
+            9
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            8,
+            7,
+            9,
+            8,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "id": "at24",
+      "type": "multi-hop",
+      "question": "By how many BLEU points does Transformer (big) beat the best ensemble on EN-DE in Table 2?",
+      "answer": "28.4 versus 26.36 for the ConvS2S Ensemble, about 2.04 BLEU.",
+      "must_contain": [
+        "28.4",
+        "26.36"
+      ],
+      "evidence": [
+        "ConvS2S Ensemble [9] 26.36"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            9,
+            1,
+            13
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.25,
+          "pages": [
+            8,
+            9,
+            8,
+            7,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 0.5,
+          "pages": [
+            8,
+            7,
+            1,
+            9,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "id": "at25",
+      "type": "factual",
+      "question": "How does the learning rate change after the warmup steps?",
+      "answer": "It decreases proportionally to the inverse square root of the step number.",
+      "must_contain": [
+        "inverse square root"
+      ],
+      "evidence": [
+        "proportionally to the inverse square root of the step number"
+      ],
+      "documents": [
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {
+        "bm25": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            8,
+            7,
+            7,
+            8
+          ]
+        },
+        "semantic": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            7,
+            8,
+            7,
+            8
+          ]
+        },
+        "hybrid": {
+          "hit": 1.0,
+          "recall": 1.0,
+          "precision": 0.2,
+          "mrr": 1.0,
+          "pages": [
+            7,
+            9,
+            7,
+            8,
+            6
+          ]
+        }
+      }
+    },
+    {
+      "id": "x01",
+      "type": "cross-document",
+      "question": "How did the minimum attendance requirement change between the 2025 and 2026 regulations?",
+      "answer": "It rose from 75% in 2025 to 80% in 2026.",
+      "must_contain": [
+        "75",
+        "80"
+      ],
+      "evidence": [
+        "minimum attendance of 75%",
+        "minimum attendance of 80%"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "x02",
+      "type": "cross-document",
+      "question": "How did the grade appeal deadline change between the two regulation documents?",
+      "answer": "It was extended from 10 working days (2025) to 15 working days (2026).",
+      "must_contain": [
+        "10",
+        "15"
+      ],
+      "evidence": [
+        "within 10 working days",
+        "within 15 working days"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "x03",
+      "type": "cross-document",
+      "question": "What do the 2025 and 2026 regulations have in common about the pass mark?",
+      "answer": "Both require a minimum aggregate score of 40% to pass a course.",
+      "must_contain": [
+        "40%"
+      ],
+      "evidence": [
+        "minimum aggregate score of 40%"
+      ],
+      "documents": [
+        "regs_2025",
+        "regs_2026"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {}
+    },
+    {
+      "id": "x04",
+      "type": "cross-document",
+      "question": "Which paper reports BLEU scores and which reports Precision@5?",
+      "answer": "The Transformer paper (Attention Is All You Need) reports BLEU; the hybrid retrieval paper reports Precision@5.",
+      "must_contain": [
+        "BLEU",
+        "Precision@5"
+      ],
+      "evidence": [
+        "Precision@5 of 0.83",
+        "establishing a new state-of-the-art BLEU score of 28.4"
+      ],
+      "documents": [
+        "hybrid_paper",
+        "attention_paper"
+      ],
+      "follow_up_of": null,
+      "answerable": true,
+      "retrieval": {}
+    }
+  ]
+}
