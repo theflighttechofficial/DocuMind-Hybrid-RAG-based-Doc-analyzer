@@ -25,6 +25,8 @@ class DocumentDetailOut(DocumentOut):
     pos_json: dict | None = None
     stats_json: dict | None = None
     toc_json: list | None = None
+    title: str | None = None
+    structure_json: dict | None = None
 
 
 class PageOut(BaseModel):

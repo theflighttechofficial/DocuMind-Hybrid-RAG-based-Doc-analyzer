@@ -54,6 +54,8 @@ def _get_or_create_legacy_user(db: Session) -> User:
 def run_startup_migrations():
     _add_column_if_missing("documents", "user_id", "VARCHAR")
     _add_column_if_missing("workspaces", "user_id", "VARCHAR")
+    _add_column_if_missing("documents", "title", "VARCHAR")
+    _add_column_if_missing("documents", "structure_json", "JSON")
 
     db = SessionLocal()
     try:

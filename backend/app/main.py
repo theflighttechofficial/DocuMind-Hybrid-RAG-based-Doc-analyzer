@@ -1,3 +1,10 @@
+import os
+
+# PyTorch only: stop transformers from importing the installed TensorFlow
+# (Keras 3 / tf-keras conflict). Must run before any transformers import.
+os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
+os.environ.setdefault("USE_TF", "0")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -5,7 +12,7 @@ from app.core.db import Base, engine
 from app.core.migrations import run_startup_migrations
 from app.models import models  # noqa: F401 ensures models are registered
 from app.nlp.nltk_setup import ensure_nltk_data
-from app.api import auth, documents, chat, search, analysis, summary, comparison, graph, evaluation, workspaces, settings as settings_api
+from app.api import auth, documents, chat, search, analysis, summary, comparison, graph, evaluation, workspaces, system, settings as settings_api
 
 Base.metadata.create_all(bind=engine)
 run_startup_migrations()
@@ -32,6 +39,7 @@ app.include_router(graph.router)
 app.include_router(evaluation.router)
 app.include_router(workspaces.router)
 app.include_router(settings_api.router)
+app.include_router(system.router)
 
 
 @app.get("/api/health")

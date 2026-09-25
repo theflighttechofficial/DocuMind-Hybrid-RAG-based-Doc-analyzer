@@ -2,13 +2,13 @@
 a query-passage cross-encoder (more accurate, more expensive than bi-encoder
 similarity) before truncating to top_k.
 """
-from functools import lru_cache
+from app.core.model_loader import load_model
 
 
-@lru_cache
 def get_reranker():
     from sentence_transformers import CrossEncoder
-    return CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+    name = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+    return load_model("reranker", [(name, lambda: CrossEncoder(name, device="cpu"))])
 
 
 def rerank(query: str, candidates: list, top_k: int = 6) -> list:

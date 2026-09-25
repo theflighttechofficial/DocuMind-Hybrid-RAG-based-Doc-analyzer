@@ -47,10 +47,15 @@ class Document(Base):
     pos_json = Column(JSON, nullable=True)
     stats_json = Column(JSON, nullable=True)
     summary_json = Column(JSON, nullable=True)
-    toc_json = Column(JSON, nullable=True)
+    toc_json = Column(JSON, nullable=True)  # [{"title", "level", "page", "path"}]
+    title = Column(String, nullable=True)  # detected document title
+    # parser metadata: page sizes (PDF points), OCR'd pages, parser notes
+    structure_json = Column(JSON, nullable=True)
 
     pages = relationship("DocumentPage", back_populates="document", cascade="all, delete-orphan")
     chunks = relationship("Chunk", back_populates="document", cascade="all, delete-orphan")
+    blocks = relationship("DocumentBlock", back_populates="document", cascade="all, delete-orphan",
+                          order_by="DocumentBlock.block_index")
     conversations = relationship("Conversation", back_populates="document", cascade="all, delete-orphan")
     workspace_links = relationship("WorkspaceDocument", back_populates="document", cascade="all, delete-orphan")
 
@@ -64,6 +69,28 @@ class DocumentPage(Base):
     text = Column(Text, nullable=False)
 
     document = relationship("Document", back_populates="pages")
+
+
+class DocumentBlock(Base):
+    """One layout block from the parser: a heading, paragraph or table, with
+    its page, bounding box and position in the section hierarchy."""
+    __tablename__ = "document_blocks"
+
+    id = Column(String, primary_key=True, default=gen_id)
+    document_id = Column(String, ForeignKey("documents.id"), nullable=False, index=True)
+    block_index = Column(Integer, nullable=False)
+    page_number = Column(Integer, nullable=False)
+    kind = Column(String, nullable=False)  # heading | paragraph | table
+    level = Column(Integer, nullable=True)
+    text = Column(Text, nullable=False)
+    bbox = Column(JSON, nullable=True)  # [x0, y0, x1, y1] in PDF points, top-left origin
+    font_size = Column(Float, nullable=True)
+    section_path = Column(JSON, nullable=True)
+    table_json = Column(JSON, nullable=True)
+    char_start = Column(Integer, nullable=True)  # offsets into the page text
+    char_end = Column(Integer, nullable=True)
+
+    document = relationship("Document", back_populates="blocks")
 
 
 class Chunk(Base):

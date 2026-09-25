@@ -4,7 +4,7 @@ python-multipart==0.0.9
 sqlalchemy==2.0.35
 pydantic==2.9.2
 pydantic-settings==2.5.2
-pypdf==4.3.1
+PyMuPDF==1.27.2.3
 python-docx==1.1.2
 sentence-transformers==3.1.1
 faiss-cpu==1.8.0.post1
@@ -17,7 +17,12 @@ rank-bm25==0.2.2
 python-dotenv==1.0.1
 aiofiles==24.1.0
 pytesseract==0.3.13
-pdf2image==1.17.0
+# OCR for scanned pages: tesseract when its binary is installed, else EasyOCR
+# (pip-only, PyTorch). Pin numpy<2 — faiss-cpu 1.8 and spaCy 3.7 need it.
+easyocr==1.7.2
+opencv-python-headless==4.10.0.84
+scikit-image==0.24.0
+psutil==7.2.2
 pyjwt==2.9.0
 bcrypt==4.2.0
 spacy==3.7.5

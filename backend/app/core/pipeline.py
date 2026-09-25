@@ -4,7 +4,7 @@ reflects actual backend state (per spec section 8: no fake progress).
 """
 from sqlalchemy.orm import Session
 
-from app.models.models import Document, DocumentPage, Chunk
+from app.models.models import Document, DocumentPage, DocumentBlock, Chunk
 from app.nlp import extraction, statistics, ner, pos, keywords
 from app.nlp.spacy_model import parse as spacy_parse
 from app.retrieval import chunking, embeddings, vector_store, lexical
@@ -28,13 +28,28 @@ def invalidate_bm25(document_id: str):
 
 def process_document(db: Session, document: Document):
     try:
-        # 1. Extract
+        # 1. Extract (layout-aware: blocks, headings, tables, bounding boxes)
         document.processing_status = "extracting"
         db.commit()
-        pages = extraction.extract_pages(document.storage_path, document.file_type)
+        extracted = extraction.extract_document(document.storage_path, document.file_type)
+        pages = extracted.pages
 
         for page_num, text in pages:
             db.add(DocumentPage(document_id=document.id, page_number=page_num, text=text))
+        for i, b in enumerate(extracted.blocks):
+            db.add(DocumentBlock(
+                document_id=document.id, block_index=i, page_number=b.page, kind=b.kind, level=b.level,
+                text=b.text, bbox=b.bbox, font_size=b.font_size, section_path=b.section_path,
+                table_json=b.table, char_start=b.char_start, char_end=b.char_end,
+            ))
+        document.title = extracted.title
+        document.toc_json = extracted.toc
+        document.structure_json = {
+            "page_sizes": {str(k): v for k, v in extracted.page_sizes.items()},
+            "ocr_pages": extracted.ocr_pages,
+            "notes": extracted.notes,
+            "block_counts": {k: sum(1 for b in extracted.blocks if b.kind == k) for k in ("heading", "paragraph", "table")},
+        }
         db.commit()
 
         full_text = "\n\n".join(text for _, text in pages)
@@ -61,10 +76,6 @@ def process_document(db: Session, document: Document):
             "keybert": keywords.extract_keywords_keybert(full_text),
         }
 
-        toc = sorted({
-            c["section"] for c in chunking.chunk_document(pages) if c["section"]
-        }, key=lambda s: full_text.find(s))
-        document.toc_json = toc[:40]
         db.commit()
 
         # 3. Chunk

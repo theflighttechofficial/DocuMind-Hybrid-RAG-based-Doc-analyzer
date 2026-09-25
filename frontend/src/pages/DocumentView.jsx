@@ -53,11 +53,23 @@ export default function DocumentView() {
           <div className="text-xs text-muted font-mono mb-3 uppercase tracking-wide">Contents</div>
           <div className="space-y-1">
             {toc.length === 0 && <div className="text-xs text-muted">No sections detected.</div>}
-            {toc.map((section) => (
-              <div key={section} className="text-sm text-muted hover:text-paper cursor-pointer truncate py-1">
-                {section}
-              </div>
-            ))}
+            {toc.map((section, i) => {
+              // older documents stored plain strings; new ones store {title, level, page}
+              const entry = typeof section === 'string' ? { title: section, level: 1 } : section
+              return (
+                <button
+                  key={`${entry.title}-${i}`}
+                  onClick={() => entry.page && setCurrentPage(entry.page)}
+                  title={entry.page ? `${entry.title} (page ${entry.page})` : entry.title}
+                  style={{ paddingLeft: `${Math.max(0, (entry.level || 1) - 1) * 10}px` }}
+                  className={`block w-full text-left text-sm hover:text-paper truncate py-1 ${
+                    entry.page === currentPage ? 'text-paper' : 'text-muted'
+                  }`}
+                >
+                  {entry.title}
+                </button>
+              )
+            })}
           </div>
           <div className="text-xs text-muted font-mono mt-6 mb-2 uppercase tracking-wide">Page</div>
           <div className="flex flex-wrap gap-1">

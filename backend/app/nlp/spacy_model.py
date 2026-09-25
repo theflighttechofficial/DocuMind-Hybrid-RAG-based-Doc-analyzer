@@ -7,13 +7,12 @@ more accurate but needs 2-4GB+ RAM to load its RoBERTa weights — this machine
 had only ~2.1GB free at install time, which is enough for en_core_web_lg
 (~1GB resident) but too tight to safely run trf alongside the app server.
 """
-from functools import lru_cache
+from app.core.model_loader import load_model
 
 
-@lru_cache
 def get_nlp():
     import spacy
-    return spacy.load("en_core_web_lg")
+    return load_model("spacy", [("en_core_web_lg", lambda: spacy.load("en_core_web_lg"))])
 
 
 def parse(text: str, max_chars: int = 200_000):
