@@ -1,0 +1,146 @@
+{
+  "what is this?": {
+    "answer": "Based on the provided documents, Project KESTREL is Halcyon Aerospace's autonomous medical-supply delivery drone program headquartered in Pune, Maharashtra, led by Chief Engineer Dr. Meera Iyer (as shown in Passage 3).",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 3,
+        "page_end": 3,
+        "section": "Technical Specifications of KESTREL-7",
+        "section_path": [
+          "Technical Specifications of KESTREL-7"
+        ],
+        "kind": "text",
+        "text": "Payloads are carried in a temperature-controlled pod that keeps contents between 2 and 8 degrees Celsius, which is required for most vaccines.",
+        "relevance": 0.0634
+      },
+      {
+        "page": 4,
+        "page_end": 4,
+        "section": "Flight Testing Results",
+        "section_path": [
+          "Flight Testing Results"
+        ],
+        "kind": "text",
+        "text": "During 2025 the team conducted 1,340 test flights. Of these, 17 flights ended in a failure, defined as any flight that did not deliver its payload to the intended destination.\n\nRoot-cause analysis attributed the failures as follows: 9 were caused by GPS drift in areas with poor satellite coverage, 5 were caused by motor overheating during long climbs, and 3 were caused by software faults.\n\nThis corresponds to a mission success rate of 98.7%, exceeding the 97% target. After the dual-GNSS upgrade in August, no further GPS-drift failures were recorded.",
+        "relevance": 0.1634
+      },
+      {
+        "page": 1,
+        "page_end": 1,
+        "section": "Project KESTREL: Annual Technical Review 2025",
+        "section_path": [
+          "Project KESTREL: Annual Technical Review 2025"
+        ],
+        "kind": "text",
+        "text": "This report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the program is Rs. 48 crore. Key risks identified this year relate to weather tolerance and cold-temperature battery performance, both discussed later in this review.",
+        "relevance": 0.4337
+      },
+      {
+        "page": 6,
+        "page_end": 6,
+        "section": "Known Limitations",
+        "section_path": [
+          "Known Limitations"
+        ],
+        "kind": "text",
+        "text": "The KESTREL-7 is not cleared to fly in rainfall heavier than 8 mm per hour, or in sustained winds above 38 km/h. Under these conditions operations are automatically grounded by the mission planner.\n\nCold temperatures also affect performance. Below 5 degrees Celsius, battery output drops and the effective range falls by approximately 30%. This mainly affects winter operations in hilly districts.\n\nThe aircraft cannot currently operate at night, pending regulatory approval for beyond-visual-line-of-sight night flights.",
+        "relevance": 0.1935
+      },
+      {
+        "page": 7,
+        "page_end": 7,
+        "section": "Budget and Future Plans",
+        "section_path": [
+          "Budget and Future Plans"
+        ],
+        "kind": "text",
+        "text": "Of the approved Rs. 48 crore budget, Rs. 41.5 crore had been spent by the end of 2025, primarily on prototype manufacturing, battery procurement and flight testing.\n\nThe next-generation KESTREL-8 is planned for first flight in Q3 2026. Its design target is a maximum payload of 7 kg and improved cold-weather battery management.\n\nA commercial pilot program will begin in Hyderabad in partnership with the pharmacy chain MedRoute, delivering prescription medicines to residential areas.",
+        "relevance": 0.1241
+      },
+      {
+        "page": 5,
+        "page_end": 5,
+        "section": "Incident Report: Chitradurga, 14 March 2025",
+        "section_path": [
+          "Incident Report: Chitradurga, 14 March 2025"
+        ],
+        "kind": "text",
+        "text": "On 14 March 2025, the prototype KESTREL-6B lost altitude control shortly after take-off and crashed in an unoccupied field near the Chitradurga test range. No one was injured and no third-party property was damaged.\n\nThe investigation traced the crash to a bug in firmware version v3.2.1, where an integer overflow in the altitude-hold routine produced an incorrect climb command. The bug was fixed in firmware v3.2.4, which is now the certified version on all KESTREL-7 aircraft.\n\nFollowing the incident, all test flights were paused for 12 days while the fix was validated in simulation.",
+        "relevance": 0.0949
+      }
+    ]
+  },
+  "What is the maximum payload of the KESTREL-7?": {
+    "answer": "As shown in Passage 4 and Passage 6, the maximum payload of the KESTREL-7 is 4.5 kg.",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 7,
+        "page_end": 7,
+        "section": "Budget and Future Plans",
+        "section_path": [
+          "Budget and Future Plans"
+        ],
+        "kind": "text",
+        "text": "Of the approved Rs. 48 crore budget, Rs. 41.5 crore had been spent by the end of 2025, primarily on prototype manufacturing, battery procurement and flight testing.\n\nThe next-generation KESTREL-8 is planned for first flight in Q3 2026. Its design target is a maximum payload of 7 kg and improved cold-weather battery management.\n\nA commercial pilot program will begin in Hyderabad in partnership with the pharmacy chain MedRoute, delivering prescription medicines to residential areas.",
+        "relevance": 0.6844
+      },
+      {
+        "page": 1,
+        "page_end": 1,
+        "section": "Project KESTREL: Annual Technical Review 2025",
+        "section_path": [
+          "Project KESTREL: Annual Technical Review 2025"
+        ],
+        "kind": "text",
+        "text": "This report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the program is Rs. 48 crore. Key risks identified this year relate to weather tolerance and cold-temperature battery performance, both discussed later in this review.",
+        "relevance": 0.5615
+      },
+      {
+        "page": 6,
+        "page_end": 6,
+        "section": "Known Limitations",
+        "section_path": [
+          "Known Limitations"
+        ],
+        "kind": "text",
+        "text": "The KESTREL-7 is not cleared to fly in rainfall heavier than 8 mm per hour, or in sustained winds above 38 km/h. Under these conditions operations are automatically grounded by the mission planner.\n\nCold temperatures also affect performance. Below 5 degrees Celsius, battery output drops and the effective range falls by approximately 30%. This mainly affects winter operations in hilly districts.\n\nThe aircraft cannot currently operate at night, pending regulatory approval for beyond-visual-line-of-sight night flights.",
+        "relevance": 0.5124
+      },
+      {
+        "page": 3,
+        "page_end": 3,
+        "section": "Technical Specifications of KESTREL-7",
+        "section_path": [
+          "Technical Specifications of KESTREL-7"
+        ],
+        "kind": "text",
+        "text": "The table below lists the certified specifications of the KESTREL-7 as of December 2025.",
+        "relevance": 0.6511
+      },
+      {
+        "page": 5,
+        "page_end": 5,
+        "section": "Incident Report: Chitradurga, 14 March 2025",
+        "section_path": [
+          "Incident Report: Chitradurga, 14 March 2025"
+        ],
+        "kind": "text",
+        "text": "On 14 March 2025, the prototype KESTREL-6B lost altitude control shortly after take-off and crashed in an unoccupied field near the Chitradurga test range. No one was injured and no third-party property was damaged.\n\nThe investigation traced the crash to a bug in firmware version v3.2.1, where an integer overflow in the altitude-hold routine produced an incorrect climb command. The bug was fixed in firmware v3.2.4, which is now the certified version on all KESTREL-7 aircraft.\n\nFollowing the incident, all test flights were paused for 12 days while the fix was validated in simulation.",
+        "relevance": 0.4068
+      },
+      {
+        "page": 3,
+        "page_end": 3,
+        "section": "Technical Specifications of KESTREL-7",
+        "section_path": [
+          "Technical Specifications of KESTREL-7"
+        ],
+        "kind": "table",
+        "text": "| Parameter | Value |\n|---|---|\n| Maximum payload | 4.5 kg |\n| Maximum range | 62 km |\n| Cruise speed | 88 km/h |\n| Endurance (flight time) | 71 minutes |\n| Empty weight | 9.2 kg |\n| Battery | 12,800 mAh solid-state (Nordwind) |\n| Navigation | Dual GNSS with visual odometry backup |\n| Firmware version (certified) | v3.2.4 |",
+        "relevance": 0.7539
+      }
+    ]
+  }
+}

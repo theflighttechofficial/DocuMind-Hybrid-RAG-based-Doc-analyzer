@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Layers, Plus, Trash2, Send, X } from 'lucide-react'
 import { api } from '../services/api.js'
-import EvidenceCard from '../components/EvidenceCard.jsx'
+import EvidenceCard, { sortByRelevance } from '../components/EvidenceCard.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 
 export default function Workspaces() {
@@ -245,8 +245,8 @@ function WorkspaceDetail({ workspace, allDocuments, onBack, onChanged }) {
                     {m.evidence?.length > 0 && (
                       <div className="space-y-3 pt-1">
                         <div className="text-[11px] text-muted font-mono uppercase tracking-wide">Evidence</div>
-                        {m.evidence.map((ev, j) => (
-                          <EvidenceCard key={j} {...ev} documentName={ev.document_name} />
+                        {sortByRelevance(m.evidence).map((ev, j) => (
+                          <EvidenceCard key={ev.citation ?? j} {...ev} documentName={ev.document_name} />
                         ))}
                       </div>
                     )}

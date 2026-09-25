@@ -4,7 +4,8 @@ conversation history for follow-up-question resolution (coreference).
 
 
 def build_context(evidence: list, show_document: bool = False) -> str:
-    """evidence: list of {"chunk": Chunk, "score": float}.
+    """evidence: list of {"chunk": Chunk, "score": float}, already sorted by
+    relevance; passage i is labelled [i] so the model can cite it inline.
 
     Parent-child retrieval: each retrieved child chunk is replaced by its
     parent section so the LLM sees the surrounding context. When several
@@ -26,7 +27,7 @@ def build_context(evidence: list, show_document: bool = False) -> str:
         )
         parent = getattr(chunk, "parent", None)
         if parent is not None and parent.id in seen_parent:
-            body = f"(Same section as Passage {seen_parent[parent.id]}.) Most relevant part:\n{chunk.text}"
+            body = f"(Same section as [{seen_parent[parent.id]}].) Most relevant part:\n{chunk.text}"
         elif parent is not None and len(parent.text) > len(chunk.text):
             seen_parent[parent.id] = i
             body = parent.text
@@ -34,7 +35,7 @@ def build_context(evidence: list, show_document: bool = False) -> str:
             if parent is not None:
                 seen_parent[parent.id] = i
             body = chunk.text
-        blocks.append(f"[Passage {i}{doc_label} — {pages}{section}]\n{body}")
+        blocks.append(f"[{i}]{doc_label} ({pages}{section})\n{body}")
     return "\n\n".join(blocks)
 
 

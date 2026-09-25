@@ -1,5 +1,5 @@
 /** The marginalia-style evidence block. Green rule = grounded, amber = uncertain. */
-export default function EvidenceCard({ page, section, text, relevance, onJump, documentName }) {
+export default function EvidenceCard({ page, section, text, relevance, onJump, documentName, citation, cited }) {
   return (
     <div className="relative pl-4 border-l-2 border-signalDim py-1">
       {documentName && (
@@ -8,8 +8,16 @@ export default function EvidenceCard({ page, section, text, relevance, onJump, d
         </div>
       )}
       <div className="flex items-baseline justify-between gap-3 mb-1.5">
-        <div className="font-mono text-xs text-signal">
-          Page {page}{section ? ` · ${section}` : ''}
+        <div className="font-mono text-xs text-signal flex items-baseline gap-2 min-w-0">
+          {citation != null && (
+            <span
+              className="shrink-0 text-paper bg-signal/15 rounded px-1.5"
+              title={cited ? `Cited in the answer as [${citation}]` : 'Not cited; shown because its relevance is above the threshold'}
+            >
+              [{citation}]
+            </span>
+          )}
+          <span className="truncate">Page {page}{section ? ` · ${section}` : ''}</span>
         </div>
         <div className="font-mono text-xs text-muted whitespace-nowrap">
           relevance {relevance.toFixed(2)}
@@ -28,4 +36,10 @@ export default function EvidenceCard({ page, section, text, relevance, onJump, d
       )}
     </div>
   )
+}
+
+/** Highest relevance first (the API already sends this order; kept here so
+ *  older saved messages render the same way). */
+export function sortByRelevance(evidence = []) {
+  return [...evidence].sort((a, b) => (b.relevance ?? 0) - (a.relevance ?? 0))
 }

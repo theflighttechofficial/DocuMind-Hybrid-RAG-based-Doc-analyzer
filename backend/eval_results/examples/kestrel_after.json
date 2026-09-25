@@ -1,0 +1,40 @@
+{
+  "what is this?": {
+    "answer": "This is Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program [2].",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 1,
+        "page_end": 1,
+        "section": "Project KESTREL: Annual Technical Review 2025",
+        "section_path": [
+          "Project KESTREL: Annual Technical Review 2025"
+        ],
+        "kind": "text",
+        "text": "This report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the program is Rs. 48 crore. Key risks identified this year relate to weather tolerance and cold-temperature battery performance, both discussed later in this review.",
+        "relevance": 0.0004,
+        "citation": 2,
+        "cited": true
+      }
+    ]
+  },
+  "What is the maximum payload of the KESTREL-7?": {
+    "answer": "The maximum payload of the KESTREL-7 is 4.5 kg [1].",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 3,
+        "page_end": 3,
+        "section": "Technical Specifications of KESTREL-7",
+        "section_path": [
+          "Technical Specifications of KESTREL-7"
+        ],
+        "kind": "table",
+        "text": "| Parameter | Value |\n|---|---|\n| Maximum payload | 4.5 kg |\n| Maximum range | 62 km |\n| Cruise speed | 88 km/h |\n| Endurance (flight time) | 71 minutes |\n| Empty weight | 9.2 kg |\n| Battery | 12,800 mAh solid-state (Nordwind) |\n| Navigation | Dual GNSS with visual odometry backup |\n| Firmware version (certified) | v3.2.4 |",
+        "relevance": 0.9997,
+        "citation": 1,
+        "cited": true
+      }
+    ]
+  }
+}

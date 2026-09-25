@@ -52,6 +52,8 @@ class EvidenceOut(BaseModel):
     text: str
     relevance: float
     spans: list[dict] = []  # [{page, bbox, char_start, char_end}] for highlighting
+    citation: int | None = None  # the [n] this passage is cited as in the answer
+    cited: bool = False  # False when shown via the relevance-threshold fallback
 
 
 class AskResponse(BaseModel):

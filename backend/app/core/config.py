@@ -42,6 +42,11 @@ class Settings(BaseSettings):
     chunk_size_words: int = 220
     chunk_overlap_words: int = 40
     top_k_retrieval: int = 6
+    # Evidence shown when an answer cites no passage: passages whose relevance
+    # (cross-encoder probability) is at least this. Tuned on the eval set with
+    # scripts/tune_evidence_threshold.py: 0.71 maximizes F2 over 273 retrieved
+    # passages (precision 0.566, recall 0.896).
+    evidence_min_relevance: float = 0.71
 
 
 @lru_cache

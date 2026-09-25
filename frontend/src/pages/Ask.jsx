@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, RotateCcw } from 'lucide-react'
 import { api } from '../services/api.js'
-import EvidenceCard from '../components/EvidenceCard.jsx'
+import EvidenceCard, { sortByRelevance } from '../components/EvidenceCard.jsx'
 import EmptyState from '../components/EmptyState.jsx'
 import { MessageSquareText } from 'lucide-react'
 import useDocumentPicker, { DocumentPickerBar } from '../hooks/useDocumentPicker.jsx'
@@ -141,8 +141,8 @@ export default function Ask() {
                     {m.evidence?.length > 0 && (
                       <div className="space-y-3 pt-1">
                         <div className="text-[11px] text-muted font-mono uppercase tracking-wide">Evidence</div>
-                        {m.evidence.map((ev, j) => (
-                          <EvidenceCard key={j} {...ev} />
+                        {sortByRelevance(m.evidence).map((ev, j) => (
+                          <EvidenceCard key={ev.citation ?? j} {...ev} />
                         ))}
                       </div>
                     )}
