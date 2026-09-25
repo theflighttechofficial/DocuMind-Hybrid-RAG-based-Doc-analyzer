@@ -24,7 +24,7 @@ def run_evaluation(db: Session, document_id: str, eval_set: list[dict], compare_
         raise ValueError("Document not found or not ready.")
 
     chunks = db.query(Chunk).filter_by(document_id=document_id).order_by(Chunk.chunk_index).all()
-    chunk_texts = [c.text for c in chunks]
+    chunk_texts = [c.index_text for c in chunks]
     bm25 = get_bm25(document_id, chunk_texts)
 
     methods = _METHODS + (["hybrid_reranked"] if compare_rerank else [])

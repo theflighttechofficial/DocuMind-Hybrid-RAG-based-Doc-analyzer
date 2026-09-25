@@ -65,7 +65,7 @@ def ask_document(
     )
 
     chunks = db.query(Chunk).filter_by(document_id=document_id).order_by(Chunk.chunk_index).all()
-    chunk_texts = [c.text for c in chunks]
+    chunk_texts = [c.index_text for c in chunks]
     bm25 = get_bm25(document_id, chunk_texts)
 
     retrieval_query = _build_retrieval_query(payload.question, history)
@@ -118,7 +118,7 @@ def ask_document_stream(
     )
 
     chunks = db.query(Chunk).filter_by(document_id=document_id).order_by(Chunk.chunk_index).all()
-    chunk_texts = [c.text for c in chunks]
+    chunk_texts = [c.index_text for c in chunks]
     bm25 = get_bm25(document_id, chunk_texts)
 
     retrieval_query = _build_retrieval_query(payload.question, history)

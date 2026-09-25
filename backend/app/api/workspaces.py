@@ -118,7 +118,7 @@ def ask_workspace(
         if not chunks:
             continue
         documents_chunks[document.id] = chunks
-        bm25_by_document[document.id] = get_bm25(document.id, [c.text for c in chunks])
+        bm25_by_document[document.id] = get_bm25(document.id, [c.index_text for c in chunks])
 
     evidence = retrieve_multi(
         documents_chunks, payload.question, bm25_by_document,

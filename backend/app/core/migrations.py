@@ -56,6 +56,12 @@ def run_startup_migrations():
     _add_column_if_missing("workspaces", "user_id", "VARCHAR")
     _add_column_if_missing("documents", "title", "VARCHAR")
     _add_column_if_missing("documents", "structure_json", "JSON")
+    for column, coltype in [
+        ("kind", "VARCHAR"), ("page_end", "INTEGER"), ("section_path", "JSON"),
+        ("char_start", "INTEGER"), ("char_end", "INTEGER"), ("spans_json", "JSON"),
+        ("embed_text", "TEXT"), ("parent_id", "VARCHAR"),
+    ]:
+        _add_column_if_missing("chunks", column, coltype)
 
     db = SessionLocal()
     try:

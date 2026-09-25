@@ -54,6 +54,7 @@ class Document(Base):
 
     pages = relationship("DocumentPage", back_populates="document", cascade="all, delete-orphan")
     chunks = relationship("Chunk", back_populates="document", cascade="all, delete-orphan")
+    chunk_parents = relationship("ChunkParent", cascade="all, delete-orphan")
     blocks = relationship("DocumentBlock", back_populates="document", cascade="all, delete-orphan",
                           order_by="DocumentBlock.block_index")
     conversations = relationship("Conversation", back_populates="document", cascade="all, delete-orphan")
@@ -93,6 +94,20 @@ class DocumentBlock(Base):
     document = relationship("Document", back_populates="blocks")
 
 
+class ChunkParent(Base):
+    """A whole section (or a ~700-word slice of a long one). Child chunks are
+    retrieved; their parent is what the LLM reads for context."""
+    __tablename__ = "chunk_parents"
+
+    id = Column(String, primary_key=True, default=gen_id)
+    document_id = Column(String, ForeignKey("documents.id"), nullable=False, index=True)
+    parent_index = Column(Integer, nullable=False)
+    section_path = Column(JSON, nullable=True)
+    page_start = Column(Integer, nullable=False)
+    page_end = Column(Integer, nullable=False)
+    text = Column(Text, nullable=False)
+
+
 class Chunk(Base):
     __tablename__ = "chunks"
 
@@ -101,10 +116,25 @@ class Chunk(Base):
     page_number = Column(Integer, nullable=False)
     section = Column(String, nullable=True)
     chunk_index = Column(Integer, nullable=False)
-    text = Column(Text, nullable=False)
+    text = Column(Text, nullable=False)  # displayed / cited text
     vector_row = Column(Integer, nullable=True)  # row index into the FAISS index
 
+    # structure-aware chunking (phase 2); NULL on chunks from older documents
+    kind = Column(String, nullable=True)  # text | table
+    page_end = Column(Integer, nullable=True)
+    section_path = Column(JSON, nullable=True)
+    char_start = Column(Integer, nullable=True)  # offsets into the first page's text
+    char_end = Column(Integer, nullable=True)  # offsets into the last page's text
+    spans_json = Column(JSON, nullable=True)  # [{page, bbox, char_start, char_end}]
+    embed_text = Column(Text, nullable=True)  # "Document > Section" header + text
+    parent_id = Column(String, ForeignKey("chunk_parents.id"), nullable=True)
+
     document = relationship("Document", back_populates="chunks")
+    parent = relationship("ChunkParent")
+
+    @property
+    def index_text(self) -> str:
+        return self.embed_text or self.text
 
 
 class Conversation(Base):

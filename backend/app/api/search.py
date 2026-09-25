@@ -7,6 +7,7 @@ from app.core.pipeline import get_bm25
 from app.models.models import Chunk, User
 from app.models.schemas import SearchRequest, SearchResultOut
 from app.retrieval.hybrid import retrieve
+from app.qa.generator import evidence_item
 
 router = APIRouter(prefix="/api/documents", tags=["search"])
 
@@ -25,7 +26,7 @@ def search_document(
         raise HTTPException(400, f"method must be one of {sorted(_VALID_METHODS)}")
 
     chunks = db.query(Chunk).filter_by(document_id=document_id).order_by(Chunk.chunk_index).all()
-    chunk_texts = [c.text for c in chunks]
+    chunk_texts = [c.index_text for c in chunks]
     bm25 = get_bm25(document_id, chunk_texts)
 
     # Rerank only in hybrid mode — bm25/semantic are meant to show each method's
@@ -35,12 +36,4 @@ def search_document(
         rerank=(payload.method == "hybrid"),
     )
 
-    return [
-        SearchResultOut(
-            page=r["chunk"].page_number,
-            section=r["chunk"].section,
-            text=r["chunk"].text,
-            relevance=r["score"],
-        )
-        for r in results
-    ]
+    return [SearchResultOut(**evidence_item(r["chunk"], r["score"])) for r in results]

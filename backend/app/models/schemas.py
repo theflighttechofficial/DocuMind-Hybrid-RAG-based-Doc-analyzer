@@ -43,10 +43,15 @@ class AskRequest(BaseModel):
 
 
 class EvidenceOut(BaseModel):
+    chunk_id: str | None = None
     page: int
+    page_end: int | None = None
     section: str | None
+    section_path: list[str] = []
+    kind: str = "text"
     text: str
     relevance: float
+    spans: list[dict] = []  # [{page, bbox, char_start, char_end}] for highlighting
 
 
 class AskResponse(BaseModel):
@@ -62,11 +67,8 @@ class SearchRequest(BaseModel):
     top_k: int = 8
 
 
-class SearchResultOut(BaseModel):
-    page: int
-    section: str | None
-    text: str
-    relevance: float
+class SearchResultOut(EvidenceOut):
+    pass
 
 
 class SummaryRequest(BaseModel):
@@ -138,13 +140,9 @@ class WorkspaceAskRequest(BaseModel):
     question: str
 
 
-class WorkspaceEvidenceOut(BaseModel):
+class WorkspaceEvidenceOut(EvidenceOut):
     document_id: str
     document_name: str
-    page: int
-    section: str | None
-    text: str
-    relevance: float
 
 
 class WorkspaceAskResponse(BaseModel):

@@ -37,21 +37,26 @@ def _build_prompt(question: str, evidence: list, history_messages: list | None, 
     return "\n".join(prompt_parts)
 
 
+def evidence_item(chunk, score: float, show_document: bool = False) -> dict:
+    item = {
+        "chunk_id": chunk.id,
+        "page": chunk.page_number,
+        "page_end": getattr(chunk, "page_end", None) or chunk.page_number,
+        "section": chunk.section,
+        "section_path": getattr(chunk, "section_path", None) or ([chunk.section] if chunk.section else []),
+        "kind": getattr(chunk, "kind", None) or "text",
+        "text": chunk.text,
+        "relevance": score,
+        "spans": getattr(chunk, "spans_json", None) or [],
+    }
+    if show_document:
+        item["document_id"] = chunk.document_id
+        item["document_name"] = chunk.document.name if chunk.document else None
+    return item
+
+
 def _build_evidence_out(evidence: list, show_document: bool) -> list:
-    evidence_out = []
-    for item in evidence:
-        chunk = item["chunk"]
-        evidence_item = {
-            "page": chunk.page_number,
-            "section": chunk.section,
-            "text": chunk.text[:600],
-            "relevance": item["score"],
-        }
-        if show_document:
-            evidence_item["document_id"] = chunk.document_id
-            evidence_item["document_name"] = chunk.document.name if chunk.document else None
-        evidence_out.append(evidence_item)
-    return evidence_out
+    return [evidence_item(item["chunk"], item["score"], show_document) for item in evidence]
 
 
 def answer_question(

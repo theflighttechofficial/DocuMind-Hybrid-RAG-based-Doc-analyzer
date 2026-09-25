@@ -106,12 +106,42 @@ def _vocab(texts) -> Counter:
     return c
 
 
+_NUMERIC_CELL = re.compile(r"^[\s(]*[-+]?\d[\d.,·×x%\s^eE()+-]*[)\s]*$|^\d+[KMB]$")
+
+
+def _merge_header_rows(rows: list[list[str]]) -> list[list[str]]:
+    """PDF tables often have 2-3 stacked header rows with spanning cells
+    ("BLEU" over "EN-DE | EN-FR"). Collapse every row above the first data
+    row (one with a numeric cell) into a single header, carrying a spanning
+    cell's label right across the blank cells it covers."""
+    first_data = next((i for i, r in enumerate(rows) if any(_NUMERIC_CELL.match(c) for c in r[1:] if c)), None)
+    if not first_data or first_data < 2:
+        return rows
+    width = len(rows[0])
+    header = [""] * width
+    for r in rows[:first_data]:
+        filled = [i for i, c in enumerate(r) if c]
+        spread = list(r)
+        # sparse row = spanning labels: fill each label rightwards until the next label
+        if 0 < len(filled) < width / 2 + 1:
+            for j, i in enumerate(filled):
+                if i == 0:
+                    continue  # the row-label column never spans
+                end = filled[j + 1] if j + 1 < len(filled) else width
+                for k in range(i + 1, end):
+                    if any(rows[x][k] for x in range(first_data) if x != rows.index(r)):
+                        spread[k] = r[i]
+        header = [(h + " " + c).strip() if c else h for h, c in zip(header, spread)]
+    return [header] + rows[first_data:]
+
+
 def rows_to_markdown(rows: list[list[str]]) -> str:
     rows = [[normalize_ws(c or "").replace("\n", " ").replace("|", "\\|") for c in r] for r in rows if any((c or "").strip() for c in r)]
     if not rows:
         return ""
     width = max(len(r) for r in rows)
     rows = [r + [""] * (width - len(r)) for r in rows]
+    rows = _merge_header_rows(rows)
     lines = ["| " + " | ".join(rows[0]) + " |", "|" + "---|" * width]
     lines += ["| " + " | ".join(r) + " |" for r in rows[1:]]
     return "\n".join(lines)
@@ -367,7 +397,9 @@ def _caption_tables(page, blocks: list[dict], body_right: float, body_left: floa
                 # prose: any full-width line of running text ends the table
                 is_prose = any((l.bbox[2] - l.bbox[0]) > 0.8 * text_width and len(l.text) > 60 for l in lines)
                 gap = (x["bbox"][1] - last_edge) if direction == 1 else (last_edge - x["bbox"][3])
-                if is_prose or x.get("heading") or _CAPTION.match(x["text"]) or (region is not None and gap > 18):
+                # row groups inside a table (Table 3 style) are separated by
+                # ~15pt; only a much larger gap means the table has ended
+                if is_prose or x.get("heading") or _CAPTION.match(x["text"]) or (region is not None and gap > 36):
                     break
                 r = fitz.Rect(x["bbox"])
                 region = r if region is None else region | r

@@ -4,7 +4,7 @@ reflects actual backend state (per spec section 8: no fake progress).
 """
 from sqlalchemy.orm import Session
 
-from app.models.models import Document, DocumentPage, DocumentBlock, Chunk
+from app.models.models import Document, DocumentPage, DocumentBlock, Chunk, ChunkParent
 from app.nlp import extraction, statistics, ner, pos, keywords
 from app.nlp.spacy_model import parse as spacy_parse
 from app.retrieval import chunking, embeddings, vector_store, lexical
@@ -78,34 +78,47 @@ def process_document(db: Session, document: Document):
 
         db.commit()
 
-        # 3. Chunk
-        chunk_dicts = chunking.chunk_document(
-            pages, settings.chunk_size_words, settings.chunk_overlap_words
-        )
+        # 3. Chunk: structure-aware children + section-level parents
+        parent_dicts, chunk_dicts = chunking.build_chunks(extracted.blocks, extracted.title or document.name)
         if not chunk_dicts:
             raise ValueError("Document produced no usable text chunks.")
 
+        parent_rows = []
+        for i, p in enumerate(parent_dicts):
+            row = ChunkParent(
+                document_id=document.id, parent_index=i, section_path=p["section_path"],
+                page_start=p["page_start"], page_end=p["page_end"], text=p["text"],
+            )
+            db.add(row)
+            parent_rows.append(row)
+        db.flush()
+
         chunk_rows = []
-        for c in chunk_dicts:
+        for i, c in enumerate(chunk_dicts):
             row = Chunk(
                 document_id=document.id,
                 page_number=c["page"],
+                page_end=c["page_end"],
                 section=c["section"],
+                section_path=c["section_path"],
                 chunk_index=c["chunk_index"],
+                kind=c["kind"],
                 text=c["text"],
+                embed_text=c["embed_text"],
+                char_start=c["char_start"],
+                char_end=c["char_end"],
+                spans_json=c["spans"],
+                parent_id=parent_rows[c["parent_idx"]].id,
+                vector_row=i,
             )
             db.add(row)
             chunk_rows.append(row)
         db.commit()
 
-        for i, row in enumerate(chunk_rows):
-            row.vector_row = i
-        db.commit()
-
         # 4. Embeddings
         document.processing_status = "embedding"
         db.commit()
-        chunk_texts = [c["text"] for c in chunk_dicts]
+        chunk_texts = [c["embed_text"] for c in chunk_dicts]
         vectors = embeddings.embed_texts(chunk_texts)
 
         # 5. Vector index
