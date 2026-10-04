@@ -19,6 +19,21 @@ os.environ.setdefault("USE_TORCH", "1")
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    # --- LLM: local by default. "gemini" is opt-in for comparison only.
+    llm_provider: str = "ollama"  # ollama | gemini
+    ollama_url: str = "http://127.0.0.1:11434"
+    # DocuMind's fine-tuned model (backend/finetune); falls back to the stock
+    # instruct model when the fine-tune has not been built on this machine.
+    ollama_model: str = "documind-qwen2.5-1.5b"
+    ollama_fallback_model: str = "qwen2.5:1.5b-instruct"
+    ollama_num_ctx: int = 4096
+    ollama_num_thread: int = 0  # 0 = Ollama's default
+    ollama_keep_alive: str = "30m"
+    llm_max_tokens: int = 400
+    # local models have a small context window: each passage sent to the LLM
+    # is the child chunk plus surrounding parent text, capped at this many words
+    llm_passage_max_words: int = 220
+
     gemini_api_key: str = ""
     gemini_model: str = "gemini-2.0-flash"
 

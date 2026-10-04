@@ -8,7 +8,7 @@ from pathlib import Path
 import requests
 
 B = "http://127.0.0.1:8000/api"
-PDF = Path(__file__).resolve().parents[4] / "KESTREL_Technical_Review_2025.pdf"
+PDF = Path(__file__).resolve().parents[2] / "demo-data" / "KESTREL_Technical_Review_2025.pdf"
 QUESTIONS = ["what is this?", "What is the maximum payload of the KESTREL-7?"]
 
 s = requests.Session()

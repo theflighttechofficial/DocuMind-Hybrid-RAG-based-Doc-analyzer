@@ -1,0 +1,70 @@
+{
+  "what is this?": {
+    "answer": "[1] (Page 4 · Flight Testing Results)\nDuring 2025 the team conducted 1,340 test flights. Of these, 17 flights ended in a failure, defined as any flight that did not deliver its payload to the intended destination.\n\nRoot-cause analysis attributed the failures as follows: 9 were caused by GPS drift in areas with poor satellite coverage, 5 were caused by motor overheating during long climbs, and 3 were caused by software faults.\n\nThis corresponds to a mission success rate of 98.7%, exceeding the 97% target. After the dual-GNSS upgrade in August, no further GPS-drift failures were recorded.\n\n[2] (Page 6 · Known Limitations)\nThe KESTREL-7 is not cleared to fly in rainfall heavier than 8 mm per hour, or in sustained winds above 38 km/h. Under these conditions operations are automatically grounded by the mission planner.\n\nCold temperatures also affect performance. Below 5 degrees Celsius, battery output drops and the effective range falls by approximately 30%. This mainly affects winter operations in hilly districts.\n\nThe aircraft cannot currently operate at night, pending regulatory approval for beyond-visual-line-of-sight night flights.\n\n[3] (Page 1 · Project KESTREL: Annual Technical Review 2025)\nHalcyon Aerospace Ltd.\n\nThis report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 4,
+        "page_end": 4,
+        "section": "Flight Testing Results",
+        "section_path": [
+          "Flight Testing Results"
+        ],
+        "kind": "text",
+        "text": "During 2025 the team conducted 1,340 test flights. Of these, 17 flights ended in a failure, defined as any flight that did not deliver its payload to the intended destination.\n\nRoot-cause analysis attributed the failures as follows: 9 were caused by GPS drift in areas with poor satellite coverage, 5 were caused by motor overheating during long climbs, and 3 were caused by software faults.\n\nThis corresponds to a mission success rate of 98.7%, exceeding the 97% target. After the dual-GNSS upgrade in August, no further GPS-drift failures were recorded.",
+        "relevance": 1.0,
+        "citation": 1,
+        "cited": true,
+        "rerank_logit": -7.207
+      },
+      {
+        "page": 6,
+        "page_end": 6,
+        "section": "Known Limitations",
+        "section_path": [
+          "Known Limitations"
+        ],
+        "kind": "text",
+        "text": "The KESTREL-7 is not cleared to fly in rainfall heavier than 8 mm per hour, or in sustained winds above 38 km/h. Under these conditions operations are automatically grounded by the mission planner.\n\nCold temperatures also affect performance. Below 5 degrees Celsius, battery output drops and the effective range falls by approximately 30%. This mainly affects winter operations in hilly districts.\n\nThe aircraft cannot currently operate at night, pending regulatory approval for beyond-visual-line-of-sight night flights.",
+        "relevance": 0.7401,
+        "citation": 2,
+        "cited": true,
+        "rerank_logit": -7.727
+      },
+      {
+        "page": 1,
+        "page_end": 1,
+        "section": "Project KESTREL: Annual Technical Review 2025",
+        "section_path": [
+          "Project KESTREL: Annual Technical Review 2025"
+        ],
+        "kind": "text",
+        "text": "Halcyon Aerospace Ltd.\n\nThis report reviews the progress of Project KESTREL, Halcyon Aerospace's autonomous medical-supply delivery drone program, during the 2025 calendar year. The program is led by Dr. Meera Iyer, Chief Engineer, and is headquartered in Pune, Maharashtra.\n\nThe current production candidate, the KESTREL-7, completed its full certification test campaign this year. It carries medical payloads over a range of more than 60 km and has demonstrated a flight reliability that exceeds the program's original target of 97%.\n\nThe total approved budget for the program is Rs. 48 crore. Key risks identified this year relate to weather tolerance and cold-temperature battery performance, both discussed later in this review.",
+        "relevance": 0.6825,
+        "citation": 3,
+        "cited": true,
+        "rerank_logit": -7.842
+      }
+    ]
+  },
+  "What is the maximum payload of the KESTREL-7?": {
+    "answer": "The maximum payload of the KESTREL-7 is 4.5 kg [2].",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 7,
+        "page_end": 7,
+        "section": "Budget and Future Plans",
+        "section_path": [
+          "Budget and Future Plans"
+        ],
+        "kind": "text",
+        "text": "Of the approved Rs. 48 crore budget, Rs. 41.5 crore had been spent by the end of 2025, primarily on prototype manufacturing, battery procurement and flight testing.\n\nThe next-generation KESTREL-8 is planned for first flight in Q3 2026. Its design target is a maximum payload of 7 kg and improved cold-weather battery management.\n\nA commercial pilot program will begin in Hyderabad in partnership with the pharmacy chain MedRoute, delivering prescription medicines to residential areas.",
+        "relevance": 0.9031,
+        "citation": 2,
+        "cited": true,
+        "rerank_logit": 6.551
+      }
+    ]
+  }
+}

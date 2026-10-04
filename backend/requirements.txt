@@ -12,7 +12,12 @@ nltk==3.9.1
 scikit-learn==1.5.2
 networkx==3.3
 numpy==1.26.4
-google-generativeai==0.8.3
+google-generativeai==0.8.3  # only used when LLM_PROVIDER=gemini (opt-in)
+requests==2.34.2  # local LLM client (Ollama HTTP API)
+# fine-tuning (backend/finetune); install a CUDA torch build first on GPU machines
+peft==0.13.2
+accelerate==1.15.0
+pandas
 rank-bm25==0.2.2
 python-dotenv==1.0.1
 aiofiles==24.1.0

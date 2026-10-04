@@ -1,0 +1,24 @@
+# DocuMind's fine-tuned answer model. {MERGED_DIR} is filled in by
+# build_ollama_model.py with the merged fp16 safetensors from train_lora.py.
+FROM {MERGED_DIR}
+
+# Qwen2.5 ChatML format, same as the stock qwen2.5 instruct models (tools removed).
+TEMPLATE """{{- if .System }}<|im_start|>system
+{{ .System }}<|im_end|>
+{{ end }}
+{{- range $i, $_ := .Messages }}
+{{- $last := eq (len (slice $.Messages $i)) 1 -}}
+{{- if eq .Role "user" }}<|im_start|>user
+{{ .Content }}<|im_end|>
+{{ else if eq .Role "assistant" }}<|im_start|>assistant
+{{ .Content }}{{ if not $last }}<|im_end|>
+{{ end }}
+{{- end }}
+{{- if and (ne .Role "assistant") $last }}<|im_start|>assistant
+{{ end }}
+{{- end }}"""
+
+PARAMETER stop "<|im_end|>"
+PARAMETER stop "<|endoftext|>"
+PARAMETER temperature 0.1
+PARAMETER num_ctx 4096

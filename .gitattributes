@@ -1,0 +1,8 @@
+# Never line-ending-convert binary files (core.autocrlf would corrupt PDFs)
+*.pdf binary
+*.docx binary
+*.png binary
+*.jpg binary
+*.mp4 binary
+*.index binary
+*.safetensors binary
