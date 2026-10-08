@@ -24,8 +24,8 @@ class Settings(BaseSettings):
     ollama_url: str = "http://127.0.0.1:11434"
     # DocuMind's fine-tuned model (backend/finetune); falls back to the stock
     # instruct model when the fine-tune has not been built on this machine.
-    ollama_model: str = "documind-qwen2.5-1.5b"
-    ollama_fallback_model: str = "qwen2.5:1.5b-instruct"
+    ollama_model: str = "documind-qwen3-4b"
+    ollama_fallback_model: str = "qwen3:4b-instruct"
     ollama_num_ctx: int = 4096
     ollama_num_thread: int = 0  # 0 = Ollama's default
     ollama_keep_alive: str = "30m"

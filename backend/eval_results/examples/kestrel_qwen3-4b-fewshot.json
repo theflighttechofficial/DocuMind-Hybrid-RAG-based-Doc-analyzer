@@ -1,0 +1,27 @@
+{
+  "what is this?": {
+    "answer": "I couldn't find sufficient information in the uploaded document to answer this question.",
+    "grounded": false,
+    "evidence": []
+  },
+  "What is the maximum payload of the KESTREL-7?": {
+    "answer": "The maximum payload of the KESTREL-7 is 4.5 kg [1].",
+    "grounded": true,
+    "evidence": [
+      {
+        "page": 3,
+        "page_end": 3,
+        "section": "Technical Specifications of KESTREL-7",
+        "section_path": [
+          "Technical Specifications of KESTREL-7"
+        ],
+        "kind": "table",
+        "text": "The table below lists the certified specifications of the KESTREL-7 as of December 2025.\n\n| Parameter | Value |\n|---|---|\n| Maximum payload | 4.5 kg |\n| Maximum range | 62 km |\n| Cruise speed | 88 km/h |\n| Endurance (flight time) | 71 minutes |\n| Empty weight | 9.2 kg |\n| Battery | 12,800 mAh solid-state (Nordwind) |\n| Navigation | Dual GNSS with visual odometry backup |\n| Firmware version (certified) | v3.2.4 |\n\nPayloads are carried in a temperature-controlled pod that keeps contents between 2 and 8 degrees Celsius, which is required for most vaccines.",
+        "relevance": 1.0,
+        "citation": 1,
+        "cited": true,
+        "rerank_logit": 8.401
+      }
+    ]
+  }
+}

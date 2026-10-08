@@ -1,15 +1,18 @@
-"""LoRA fine-tune of a small instruct model on finetune/data/train.jsonl, on CPU.
+"""LoRA / QLoRA fine-tune of an instruct model on finetune/data/train.jsonl.
 
 Loss is computed on the assistant answer only (prompt tokens are masked), so
 the model learns *how to answer from passages* — citation format, refusal
 wording, brevity — rather than memorizing SQuAD passages.
 
     python finetune/train_lora.py --dry-run     # time 3 steps and exit
-    python finetune/train_lora.py               # GPU defaults: 1.5B base, 300 steps
-    python finetune/train_lora.py --base Qwen/Qwen2.5-0.5B-Instruct --name documind-qwen2.5-0.5b
+    python finetune/train_lora.py               # Qwen3-4B, QLoRA, light run: 60 steps x 4 examples
+    python finetune/train_lora.py --base Qwen/Qwen2.5-0.5B-Instruct --name documind-qwen2.5-0.5b --no-4bit
 
-Runs on CUDA when available (bf16), else CPU (fp32; ~30 s per example on a
-4-core laptop, too slow for more than a smoke test).
+Runs on CUDA when available, else CPU (fp32; ~30 s per example for 0.5B on a
+4-core laptop; a 4B model does not fit in CPU training memory at all).
+On CUDA, models of 3B+ parameters load in 4-bit (QLoRA, bitsandbytes) so
+Qwen3-4B trains in 8 GB of VRAM; the adapter is then merged into a bf16 copy
+of the base on the CPU (needs ~10 GB free RAM) for `ollama create`.
 
 Writes finetune/out/<name>/adapter (LoRA weights), finetune/out/<name>/merged
 (full fp16 safetensors, ready for `ollama create`), and train_log.json.
@@ -62,11 +65,13 @@ def val_loss(model, data):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default="Qwen/Qwen2.5-1.5B-Instruct")
-    ap.add_argument("--name", default="documind-qwen2.5-1.5b",
+    ap.add_argument("--base", default="Qwen/Qwen3-4B-Instruct-2507")
+    ap.add_argument("--name", default="documind-qwen3-4b-lora",
                     help="also the Ollama model name; set OLLAMA_MODEL to this in backend/.env")
-    ap.add_argument("--steps", type=int, default=300, help="optimizer steps")
-    ap.add_argument("--grad-accum", type=int, default=8)
+    # deliberately light: 240 examples only teach the answer format (citations,
+    # refusal sentence, brevity) without overwriting what the base model knows
+    ap.add_argument("--steps", type=int, default=60, help="optimizer steps")
+    ap.add_argument("--grad-accum", type=int, default=4)
     ap.add_argument("--lr", type=float, default=2e-4)
     ap.add_argument("--rank", type=int, default=16)
     ap.add_argument("--max-len", type=int, default=1280)
@@ -76,6 +81,7 @@ def main():
     ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
     ap.add_argument("--no-grad-checkpointing", action="store_true",
                     help="faster, needs more memory (fine for 0.5B on an 8 GB GPU)")
+    ap.add_argument("--no-4bit", action="store_true", help="train in bf16 even for 3B+ models on CUDA")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
 
@@ -90,9 +96,21 @@ def main():
     print(f"device {device} dtype {dtype}" + (f" ({torch.cuda.get_device_name(0)})" if device.type == "cuda" else ""))
 
     tok = AutoTokenizer.from_pretrained(args.base)
-    model = AutoModelForCausalLM.from_pretrained(args.base, dtype=dtype).to(device)
+    from transformers import AutoConfig
+    cfg = AutoConfig.from_pretrained(args.base)
+    approx_params = cfg.num_hidden_layers * 12 * cfg.hidden_size ** 2 + cfg.vocab_size * cfg.hidden_size
+    use_4bit = device.type == "cuda" and not args.no_4bit and approx_params > 3e9
+    if use_4bit:
+        from transformers import BitsAndBytesConfig
+        from peft import prepare_model_for_kbit_training
+        model = AutoModelForCausalLM.from_pretrained(args.base, device_map={"": 0}, quantization_config=BitsAndBytesConfig(
+            load_in_4bit=True, bnb_4bit_quant_type="nf4", bnb_4bit_compute_dtype=dtype, bnb_4bit_use_double_quant=True))
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=not args.no_grad_checkpointing)
+        print("loaded in 4-bit (QLoRA)")
+    else:
+        model = AutoModelForCausalLM.from_pretrained(args.base, dtype=dtype).to(device)
     model.config.use_cache = False
-    if not args.no_grad_checkpointing:
+    if not args.no_grad_checkpointing and not use_4bit:
         model.gradient_checkpointing_enable()
         model.enable_input_require_grads()
 
@@ -155,6 +173,13 @@ def main():
         return
 
     model.save_pretrained(out_dir / "adapter")
+    if use_4bit:
+        # merging into 4-bit weights loses precision: reload the base in bf16 on CPU
+        from peft import PeftModel
+        del model, opt
+        torch.cuda.empty_cache()
+        base = AutoModelForCausalLM.from_pretrained(args.base, dtype=torch.bfloat16, low_cpu_mem_usage=True)
+        model = PeftModel.from_pretrained(base, out_dir / "adapter")
     merged = model.merge_and_unload()
     merged = merged.to("cpu", torch.float16)
     merged.config.use_cache = True
