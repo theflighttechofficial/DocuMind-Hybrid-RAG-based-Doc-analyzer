@@ -1,264 +1,298 @@
 # DocuMind AI
 
-**Turn documents into knowledge.**
+> **Evidence-First Document Intelligence & Hybrid RAG Platform**  
+> Transform complex documents into verifiable knowledge with multi-strategy retrieval, grounded citations, local LLM inference, and zero hallucinations.
 
-DocuMind AI is an evidence-first document intelligence platform. Upload a PDF, DOCX, or
-TXT file and ask it questions in plain language — every answer comes with the exact
-page and passage it was drawn from, and the system explicitly says so when it can't
-find an answer, rather than guessing.
+---
 
-## Problem statement
+## 🌟 Overview
 
-Large documents contain valuable information, but conventional keyword search forces
-readers to manually locate and interpret relevant passages, and general-purpose chat
-assistants tend to answer from outside knowledge rather than the document itself —
-producing confident-sounding but ungrounded answers.
+DocuMind AI is a comprehensive document intelligence platform designed to eliminate LLM hallucinations through strict evidence grounding. Rather than relying on ungrounded generative answers, DocuMind combines **lexical search (BM25)**, **dense semantic search (FAISS)**, and **cross-encoder reranking** with rigorous NLP analysis (NER, POS, readability, KeyBERT/TextRank keyword extraction, knowledge graphs). 
 
-## Solution
+Every generated answer is anchored to exact document pages, paragraphs, and passages with inline citations. When an answer cannot be grounded in the provided source passages, the system explicitly abstains rather than inventing facts.
 
-DocuMind combines classic NLP analysis (NER, POS tagging, keyword extraction,
-readability statistics) with a retrieval-augmented generation (RAG) pipeline that
-supports three retrieval strategies — lexical (BM25), semantic (dense embeddings via
-FAISS), and hybrid — so answers can be evaluated and traced back to source passages.
+---
 
-## Features
+## 🚀 Key Features
 
-- **Ask** — conversational QA over a document, grounded in retrieved evidence, with
-  explicit "not found" responses instead of hallucinated answers, and follow-up
-  question context (coreference across turns).
-- **Search** — semantic, keyword, and hybrid retrieval, so you can compare how each
-  method surfaces different results for the same query.
-- **NLP Insights** — named entity recognition, POS distribution, TF-IDF and TextRank
-  keyword extraction, and readability/vocabulary statistics, all computed from the
-  actual document text.
-- **Summarize** — hierarchical summarization (section summaries combined into a final
-  structured summary) at brief/standard/detailed lengths.
-- **Compare** — semantic (not string) diff between two document versions, classifying
-  each matched section as unchanged, modified, added, or removed.
-- **Knowledge Graph** — an entity co-occurrence graph built from the document's own
-  named entities and chunk-level co-mentions.
-- **Evaluation** — a dashboard for running a labeled question set against the live
-  pipeline and computing real Precision@K, Recall@K, MRR, F1, Exact Match, and ROUGE
-  scores across all three retrieval methods.
+- **Grounded Ask & Conversational QA**
+  - Interactive multi-turn chat over single documents or entire workspaces.
+  - Coreference resolution across conversation history for contextual follow-up questions.
+  - Real-time token streaming with inline `[n]` citations linked to source passages.
+  - Strict evidence verification: refuses to hallucinate when text is absent.
 
-## Architecture
+- **Multi-Document Workspaces**
+  - Group related documents into unified collections.
+  - Cross-document retrieval and synthesized answering with source document badges.
+
+- **Multi-Strategy Search Comparison**
+  - Compare **Semantic (FAISS)**, **Lexical (BM25)**, and **Hybrid (Score Fusion)** retrieval side by side for any query.
+  - Integrated cross-encoder reranker (`ms-marco-MiniLM-L-6-v2`) for maximal precision.
+
+- **Deep NLP Insights**
+  - **Named Entity Recognition (NER)**: 18 OntoNotes entity classes powered by spaCy (`en_core_web_lg`).
+  - **POS Tagging & Linguistic Stats**: Coarse universal POS distribution, word/sentence metrics, and Flesch Reading Ease scores.
+  - **Tri-Method Keyword Extraction**: Side-by-side comparison of TF-IDF, TextRank (graph centrality), and KeyBERT.
+
+- **Hierarchical Summarization**
+  - Chunk-to-section summarization combined into structured overviews at brief, standard, or detailed lengths.
+  - Extractive pre-filtering as a safety buffer for dense sections.
+
+- **Semantic Document Comparison**
+  - Semantic section alignment and diff classification (unchanged, modified, added, removed) between document revisions.
+
+- **Interactive Knowledge Graph**
+  - Entity co-occurrence graph rendered with React Flow, mapping relationships across document chunks.
+
+- **Scientific Evaluation Suite**
+  - In-app evaluation harness to benchmark live pipelines against gold-standard Q&A datasets.
+  - Real-time computation of **Precision@K**, **Recall@K**, **MRR**, **Token F1**, **Exact Match**, **BERTScore F1**, and **ROUGE-1/2/L**.
+
+- **Flexible LLM Backend**
+  - **Privacy-first Local Inference**: Native integration with [Ollama](https://ollama.com) (optimized for `documind-qwen3-4b` / `qwen3:4b-instruct`).
+  - **Cloud Alternative**: Direct support for Google Gemini (`gemini-2.0-flash` / `gemini-3.5-flash-lite`).
+  - **Fine-Tuning Pipeline**: Included scripts for QLoRA fine-tuning and prompt-level adaptation in `backend/finetune/`.
+
+- **Multi-Format Ingestion & Robust OCR Fallback**
+  - Supports PDF, DOCX, and TXT files.
+  - Automated OCR fallback (`pytesseract` + `pdf2image` / `easyocr`) for scanned or image-heavy PDF pages.
+
+- **Secure & Isolated**
+  - User authentication with JWT in-memory tokens to mitigate XSS vulnerabilities.
+  - Per-user document and workspace isolation.
+
+---
+
+## 🏗️ Architecture
 
 ```mermaid
 flowchart TD
-    A[Upload PDF/DOCX/TXT] --> B[Text Extraction]
-    B --> C[NLP Analysis<br/>NER · POS · Keywords · Stats]
-    B --> D[Chunking<br/>page + section metadata]
-    D --> E[Embeddings<br/>sentence-transformers]
-    D --> F[BM25 Index]
-    E --> G[FAISS Vector Index]
-    H[User Question] --> I{Retrieval}
-    F --> I
-    G --> I
-    I --> J[Top-K Evidence]
-    J --> K[LLM: Gemini]
-    K --> L[Grounded Answer + Citations]
+    subgraph Ingestion ["Ingestion & Analysis"]
+        A[Upload PDF / DOCX / TXT] --> B[Text Extraction + OCR Fallback]
+        B --> C[NLP Engine: spaCy + NLTK<br/>NER · POS · TextRank · KeyBERT]
+        B --> D[Hierarchical Word-Window Chunking]
+    end
+
+    subgraph Indexing ["Dual Indexing"]
+        D --> E[Local Embedding Model<br/>all-MiniLM-L6-v2]
+        D --> F[Okapi BM25 Index]
+        E --> G[FAISS Vector Store]
+    end
+
+    subgraph Retrieval ["Hybrid Retrieval & Reranking"]
+        H[User Query] --> I[BM25 Lexical Score]
+        H --> J[FAISS Semantic Score]
+        F --> I
+        G --> J
+        I & J --> K[Reciprocal/Weighted Score Fusion]
+        K --> L[Cross-Encoder Reranker<br/>ms-marco-MiniLM-L-6-v2]
+        L --> M[Top-K Evidence Passages]
+    end
+
+    subgraph Generation ["Grounded Generation"]
+        M --> N[Local LLM via Ollama / Gemini API]
+        H --> N
+        N --> O[Streamed Response with Verified Inline Citations]
+    end
 ```
 
-## NLP pipeline
+---
 
-| Stage | Technique | Library |
-|---|---|---|
-| Extraction | Page-scoped text extraction, with OCR fallback for scanned PDF pages | pypdf, python-docx, pytesseract, pdf2image |
-| Statistics | Sentence/word counts, Flesch reading ease | nltk |
-| NER | Statistical NER (word vectors + CNN), 18 OntoNotes entity types (PERSON, ORG, MONEY, PERCENT, LAW, NORP, WORK_OF_ART, ...) | spaCy (`en_core_web_lg`) |
-| POS tagging | Same spaCy pipeline as NER — Universal Dependencies tags collapsed to coarse categories, sharing one parse per document with NER | spaCy (`en_core_web_lg`) |
-| Keywords | TF-IDF (sentence-level corpus), TextRank (PageRank over co-occurrence graph), and KeyBERT (embedding similarity over spaCy noun-phrase candidates) — three methods shown side by side | scikit-learn, networkx, KeyBERT, sentence-transformers |
-| Chunking | Overlapping word-window chunks with heading detection | custom |
-| Lexical retrieval | Okapi BM25 | rank-bm25 |
-| Semantic retrieval | Sentence embeddings + FAISS flat index (cosine via inner product) | sentence-transformers, faiss |
-| Hybrid retrieval | Weighted score fusion (0.6 semantic / 0.4 lexical) | custom |
-| Reranking | Cross-encoder second-stage rerank over hybrid's top ~20 candidates — on by default for Ask (single-doc and cross-document) and for Search in hybrid mode | sentence-transformers (`CrossEncoder`, `cross-encoder/ms-marco-MiniLM-L-6-v2`) |
-| QA generation | Grounded prompting with explicit refusal instruction; conversation history folded into the retrieval query so follow-up questions retrieve the right passages | Gemini API |
-| Summarization | Hierarchical: chunk → section summaries → combined summary, with sentence-embedding extractive pre-filtering as a safety net for oversized sections | Gemini API, sentence-transformers |
-| Comparison | Chunk-level semantic matching + LLM classification | sentence-transformers, Gemini API |
-| Evaluation | Precision@K/Recall@K/MRR (with a reranked-vs-not comparison toggle), Exact Match, token F1, embedding cosine similarity, BERTScore F1 (token-level), ROUGE-1/2/L | scikit-learn, bert-score |
+## 💻 Tech Stack
 
-## Technology stack
+| Domain | Technologies |
+|---|---|
+| **Backend** | Python 3.10+, FastAPI, SQLAlchemy, SQLite, Pydantic Settings, Uvicorn |
+| **Frontend** | React 18, Vite, Tailwind CSS, Lucide Icons, React Flow |
+| **Retrieval & Search** | FAISS, Rank-BM25, Sentence-Transformers (`all-MiniLM-L6-v2`, `ms-marco-MiniLM-L-6-v2`) |
+| **NLP & Extraction** | spaCy (`en_core_web_lg`), NLTK, KeyBERT, scikit-learn, NetworkX, PyPDF, python-docx, PyTesseract, pdf2image |
+| **LLM Inference** | Ollama (Local: `documind-qwen3-4b`, `qwen3:4b-instruct`) or Google Gemini API |
+| **Authentication** | JWT (in-memory client storage for maximum XSS resilience), passlib / bcrypt |
 
-- **Backend:** Python, FastAPI, SQLAlchemy, SQLite
-- **Frontend:** React, Vite, Tailwind CSS, React Flow (knowledge graph)
-- **Retrieval:** FAISS (local vector index), rank-bm25, sentence-transformers
-  (`all-MiniLM-L6-v2`, runs locally — no embedding API costs)
-- **LLM:** Google Gemini API (`gemini-2.0-flash` by default)
+---
 
-## Database design
-
-SQLite via SQLAlchemy, with tables for `documents`, `document_pages`, `chunks`
-(with page/section/vector-row metadata for citations), `conversations`, `messages`,
-and `evaluations`. See `backend/app/models/models.py` for the full schema.
-
-## Evaluation methodology
-
-Retrieval quality is measured with Precision@5, Recall@5, and Mean Reciprocal Rank
-against a labeled set of (question, source page) pairs. QA quality uses Exact Match,
-token-level F1, and embedding-based semantic similarity against reference answers.
-Summarization quality uses ROUGE-1/2/L (computed via longest-common-subsequence and
-n-gram overlap — no external ROUGE library required). All metrics are computed live
-against the current pipeline; nothing is precomputed or hardcoded.
-
-## Installation
+## ⚙️ Quick Start
 
 ### Prerequisites
-- Python 3.10+
-- Node.js 18+
-- **~2GB free RAM** — the NLP stack now loads spaCy's `en_core_web_lg` (~1GB resident)
-  alongside the sentence-transformers embedding model. If your machine has less than
-  ~2.5GB free, swap to `en_core_web_sm` in `app/nlp/spacy_model.py` (smaller/faster,
-  noticeably less accurate) rather than risk it OOMing under load.
-- A free [Gemini API key](https://aistudio.google.com/apikey)
-- (Optional, for scanned/image-only PDFs) [Tesseract OCR](https://github.com/tesseract-ocr/tesseract)
-  and [Poppler](https://poppler.freedesktop.org/) installed as system binaries — see
-  [OCR fallback for scanned PDFs](#ocr-fallback-for-scanned-pdfs) below. Without them,
-  ordinary text-based PDFs, DOCX, and TXT files work exactly as before.
+- **Python 3.10+** (tested on Python 3.12)
+- **Node.js 18+** & `npm`
+- **Ollama** (optional, recommended for local offline LLM inference) — [Download Ollama](https://ollama.com)
+- **Gemini API Key** (optional, if using cloud LLM) — [Get API Key](https://aistudio.google.com/apikey)
+- **Tesseract OCR & Poppler** (optional, needed only for scanned PDFs)
 
-### Backend
+---
+
+### Step 1: Start Ollama (for Local LLM)
+
+If you wish to run completely locally without sending document data to cloud APIs:
 
 ```bash
-cd backend
-python3 -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python -m spacy download en_core_web_lg   # ~560MB, one-time — powers NER/POS
+# Pull the base instruct model
+ollama pull qwen3:4b-instruct
 
-cp .env.example .env
-# edit .env and paste your GEMINI_API_KEY
-
-uvicorn app.main:app --reload --port 8000
+# Verify it is running
+curl http://127.0.0.1:11434/
 ```
 
-The first request that triggers embeddings will download the local embedding model
-(~90MB, one-time) and NLTK will download its corpora automatically. The first NER/POS
-request loads spaCy's model into memory (~1GB resident, ~8s one-time cold start, then
-fast); the first keyword-extraction or evaluation request likewise loads the shared
-sentence-transformers model used by KeyBERT and BERTScore.
+*(Optional: see [Local Model Fine-Tuning](#-local-model-fine-tuning) to bake custom DocuMind citation prompts or train LoRA adapters).*
 
-### Frontend
+---
+
+### Step 2: Backend Setup
+
+1. **Navigate to the backend directory and set up a virtual environment:**
+
+   ```bash
+   cd backend
+   python -m venv venv
+   ```
+
+   - **Windows:** `venv\Scripts\activate`
+   - **Linux/macOS:** `source venv/bin/activate`
+
+2. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   python -m spacy download en_core_web_lg
+   ```
+
+3. **Configure Environment Variables:**
+
+   Create or edit `backend/.env`:
+
+   ```env
+   # --- LLM Settings (ollama or gemini) ---
+   LLM_PROVIDER=ollama
+   OLLAMA_URL=http://127.0.0.1:11434
+   OLLAMA_MODEL=qwen3:4b-instruct
+   OLLAMA_FALLBACK_MODEL=qwen3:4b-instruct
+
+   # --- Optional Gemini Fallback ---
+   GEMINI_API_KEY=your_gemini_api_key_here
+   GEMINI_MODEL=gemini-2.0-flash
+
+   # --- Storage & Database ---
+   DATABASE_URL=sqlite:///./storage/documind.db
+   UPLOAD_DIR=./storage/uploads
+   VECTOR_DIR=./storage/vector_index
+
+   # --- Security ---
+   JWT_SECRET=your_super_secret_jwt_key
+   ```
+
+4. **Launch the FastAPI backend:**
+
+   ```bash
+   uvicorn app.main:app --reload --port 8000
+   ```
+
+   Verify health at `http://localhost:8000/api/health` (should return `{"status":"ok"}`).
+
+---
+
+### Step 3: Frontend Setup
+
+1. **In a new terminal, navigate to the frontend directory:**
+
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Start the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Open the application:**
+   Navigate to [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+### Step 4: Login & Demo Data
+
+DocuMind uses authenticated, user-isolated workspaces.
+
+1. **Default / Pre-existing Data:**
+   If upgrading an existing database, existing files are tied to:
+   - **Email:** `legacy@documind.local`
+   - **Password:** `documind123`
+
+2. **New Users:**
+   Click **Register** on the login page to create an isolated workspace.
+
+3. **Sample Datasets:**
+   Explore sample files in `/demo-data`:
+   - `research_paper_hybrid_retrieval.txt`: Ideal for testing Ask, Insights, Search comparison, and Evaluation.
+   - `university_regulations_2025.txt` & `university_regulations_2026.txt`: Built for testing Semantic Compare.
+   - `sample_evaluation_set.json`: Paste into the Evaluation dashboard to run empirical benchmark runs.
+
+---
+
+## 🐳 Docker Deployment
+
+Run the complete stack with a single command via Docker Compose:
 
 ```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Open **http://localhost:5173**. The dev server proxies `/api` to the backend on port
-8000 (see `vite.config.js`).
-
-### Environment variables
-
-See `backend/.env.example`:
-
-```
-GEMINI_API_KEY=        # required — get one at https://aistudio.google.com/apikey
-GEMINI_MODEL=gemini-2.0-flash
-DATABASE_URL=sqlite:///./storage/documind.db
-UPLOAD_DIR=./storage/uploads
-VECTOR_DIR=./storage/vector_index
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
-JWT_SECRET=            # signs auth tokens — set a real random value outside local dev
-```
-
-### Auth and per-user data
-
-DocuMind requires an account: register or log in from the app's login screen before
-uploading or asking anything. Documents and workspaces are scoped to the logged-in
-user — you only ever see your own.
-
-The session token is kept in memory only (never `localStorage`), so refreshing the
-page or closing the tab logs you out — this is deliberate, to avoid a stored token
-being readable by an XSS payload.
-
-**If you're upgrading from a version of DocuMind without auth:** any documents or
-workspaces already in your local database are automatically attached to a one-time
-"legacy" account on first startup, rather than becoming orphaned:
-
-```
-email:    legacy@documind.local
-password: documind123
-```
-
-Log in with those credentials to see your pre-existing data, then register your own
-account and, if you want, re-upload documents under it — there's no UI to transfer
-ownership between accounts yet.
-
-### OCR fallback for scanned PDFs
-
-PDF pages that extract as empty or near-empty text (i.e. scanned/image-only pages) are
-automatically re-processed with OCR (`pytesseract` + `pdf2image`) instead of being
-treated as unreadable. This requires two system-level binaries — **not** Python
-packages, so `pip install -r requirements.txt` alone won't provide them:
-
-- **Tesseract OCR** — `sudo apt install tesseract-ocr` (Debian/Ubuntu),
-  `brew install tesseract` (macOS), or the [Windows installer](https://github.com/UB-Mannheim/tesseract/wiki).
-- **Poppler** (needed by `pdf2image` to rasterize PDF pages) — `sudo apt install poppler-utils`,
-  `brew install poppler`, or the [Windows binaries](https://github.com/oschwartz10612/poppler-windows/releases/)
-  (add the `bin/` folder to your `PATH`).
-
-If neither is installed, DocuMind still works normally for text-based PDFs, DOCX, and
-TXT — only fully scanned PDFs are affected, and they fail with a clear message
-distinguishing "OCR unavailable on this server" from "this document is genuinely
-empty," rather than a generic extraction error.
-
-### Running with Docker Compose
-
-One-command setup for both services (requires Docker + Docker Compose):
-
-```bash
-cd backend
-cp .env.example .env
-# edit .env and paste your GEMINI_API_KEY — docker-compose reads this file directly
-
-cd ..
+# In documind/
 docker compose up --build
 ```
 
-- Frontend: **http://localhost:5173** (nginx, serving the production build and
-  proxying `/api` to the backend container)
-- Backend: **http://localhost:8000** (also reachable directly for API testing)
-- SQLite database, uploaded files, and the FAISS index persist in the
-  `backend_storage` named volume across restarts (`docker compose down -v` to wipe it)
-- The backend image installs `tesseract-ocr` and `poppler-utils`, so OCR fallback for
-  scanned PDFs works out of the box in Docker even without those installed on your host
+- **Frontend:** [http://localhost:5173](http://localhost:5173)
+- **Backend:** [http://localhost:8000](http://localhost:8000)
+- Pre-packaged with Tesseract OCR and Poppler utilities in the container image.
+- Data persists in the `backend_storage` volume.
 
-### Try it with demo data
+---
 
-Sample documents are in `/demo-data`:
-- `research_paper_hybrid_retrieval.txt` — for Ask, Search, Insights, Summarize, Evaluation
-- `university_regulations_2025.txt` + `university_regulations_2026.txt` — for Compare
-- `sample_evaluation_set.json` — paste into the Evaluation page against the research paper
+## 🧠 Local Model Fine-Tuning
 
-## Running locally — quick check
+DocuMind provides end-to-end tooling to adapt local language models to strict citation contracts and abstention behavior:
 
-1. Start the backend (`uvicorn app.main:app --reload --port 8000`) and confirm
-   `http://localhost:8000/api/health` returns `{"status": "ok"}`.
-2. Start the frontend (`npm run dev`) and open `http://localhost:5173`.
-3. Upload `research_paper_hybrid_retrieval.txt` from `/demo-data` and watch the real
-   processing pipeline (extracting → analyzing → embedding → indexing → ready).
-4. Go to **Ask** and try: *"What methodology does the paper use?"* — then a follow-up
-   like *"What weighting did it use?"* to see conversation memory in action.
-5. Go to **Search**, try *"students who are not eligible for the final exam"* against
-   the regulations documents once uploaded — compare Semantic vs Keyword vs Hybrid.
-6. Upload both regulation documents and use **Compare**.
+- **Prompt-Level Adaptation (`finetune/build_fewshot_model.py`)**: Bakes strict zero-hallucination rules and SQuAD few-shot demonstrations into an Ollama Modelfile without altering model weights.
+- **QLoRA Weight Fine-Tuning (`finetune/train_lora.py`)**: Lightweight 4-bit LoRA training for Qwen3-4B on consumer GPUs (e.g., RTX 5050 8GB).
+- **Packaging (`finetune/build_ollama_model.py`)**: Merges adapters and exports quantized GGUF models directly to Ollama.
 
-## Future improvements / left for continuation
+Refer to [`TRAINING.md`](file:///c:/Users/DELL/Downloads/documind-ai/documind/TRAINING.md) and [`backend/finetune/README.md`](file:///c:/Users/DELL/Downloads/documind-ai/documind/backend/finetune/README.md) for step-by-step guidance.
 
-See `CONTINUE_WITH_CLAUDE_CODE.md` for a ready-to-run prompt covering:
-- Multi-document workspaces and cross-document QA
-- Reranking stage in the retrieval pipeline
-- OCR fallback for scanned PDFs
-- Streaming LLM responses
-- Auth and per-user document isolation
-- Dark/light theme toggle (currently dark-only)
-- Docker Compose packaging
+---
 
-## Academic/research motivation
+## 📁 Project Structure
 
-This project investigates: *How does semantic and hybrid retrieval affect the quality
-of document question answering compared with traditional lexical retrieval?* The
-Evaluation dashboard is built specifically to let you answer this empirically against
-your own documents and question sets, comparing BM25, semantic, and hybrid retrieval
-side by side on the same metrics.
+```
+documind/
+├── backend/
+│   ├── app/
+│   │   ├── api/            # REST & SSE streaming routers (chat, search, analysis, etc.)
+│   │   ├── core/           # Config, database engine, startup migrations, security
+│   │   ├── evaluation/     # Precision@K, Recall, MRR, F1, BERTScore, ROUGE engines
+│   │   ├── models/         # SQLAlchemy schemas (users, documents, chunks, workspaces)
+│   │   ├── nlp/            # spaCy pipeline, OCR extraction, KeyBERT, TextRank
+│   │   ├── qa/             # Grounded prompt builder, Ollama & Gemini streaming clients
+│   │   └── retrieval/      # BM25, FAISS indexer, hybrid ranker, cross-encoder reranker
+│   ├── finetune/           # Dataset synthesis, LoRA fine-tuning, Ollama model export
+│   ├── demo-data/          # Example documents and evaluation benchmarks
+│   ├── storage/            # SQLite DB, uploads, and FAISS indices
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/     # UI primitives, chat cards, citations, navbar
+│   │   ├── context/        # Auth and theme context providers
+│   │   ├── pages/          # Ask, Search, Insights, Compare, Workspaces, Eval, Settings
+│   │   └── services/       # API clients for backend endpoints
+│   ├── Dockerfile
+│   ├── nginx.conf
+│   └── package.json
+├── docker-compose.yml
+├── TRAINING.md
+└── README.md
+```
+
+---
+
+## 📜 License & Citation
+
+DocuMind AI is developed for research and practical exploration into hybrid retrieval systems and grounded hallucination mitigation. Released under the MIT License.
