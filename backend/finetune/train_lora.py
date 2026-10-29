@@ -167,7 +167,9 @@ def main():
                 print(f"step {step} val_loss {entry['val_loss']:.4f}", flush=True)
                 model.save_pretrained(out_dir / "adapter")
             log["steps"].append(entry)
-            (out_dir / "train_log.json").write_text(json.dumps(log, indent=2))
+            # a dry run must not overwrite the real run's log
+            log_name = "dry_run_log.json" if args.dry_run else "train_log.json"
+            (out_dir / log_name).write_text(json.dumps(log, indent=2))
 
     if args.dry_run:
         return
